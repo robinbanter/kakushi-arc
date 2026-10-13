@@ -1,0 +1,26 @@
+{
+  "name": "@kakushi/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kakushi SDK for Arc: ERC-5564/6538 stealth addresses, USDC shielded-pool notes and proofs, and the relayer client.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@kakushi/config": "workspace:*",
+    "@kakushi/prover": "workspace:*",
+    "@noble/curves": "1.9.1",
+    "viem": "^2.38.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
+    "@types/node": "^22.20.1"
+  }
+}

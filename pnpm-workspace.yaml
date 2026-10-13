@@ -1,0 +1,8 @@
+packages:
+  - "config"
+  - "packages/*"
+  - "!packages/contracts"
+  - "!packages/zk"
+
+onlyBuiltDependencies:
+  - esbuild

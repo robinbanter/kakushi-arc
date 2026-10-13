@@ -1,0 +1,27 @@
+{
+  "name": "@kakushi/prover",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kakushi prover: BN254 Poseidon2, the shielded-pool Merkle tree, notes and Noir/UltraHonk proof generation (Node and browser).",
+  "exports": {
+    ".": "./src/index.ts",
+    "./prover": "./src/prover.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "gen:poseidon": "node scripts/gen-poseidon2-sol.ts"
+  },
+  "dependencies": {
+    "@aztec/bb.js": "5.0.0-nightly.20260522",
+    "@noir-lang/noir_js": "1.0.0-beta.22",
+    "@zkpassport/poseidon2": "0.6.2",
+    "viem": "^2.38.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

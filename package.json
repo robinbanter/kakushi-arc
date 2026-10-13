@@ -1,0 +1,31 @@
+{
+  "name": "kakushi-arc",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Kakushi on Circle's Arc: private USDC payments. Stealth addresses (ERC-5564/6538), a shielded USDC pool with Noir/UltraHonk proofs, and a gasless relayer paid in USDC.",
+  "type": "module",
+  "engines": { "node": ">=22.18.0" },
+  "packageManager": "pnpm@10.29.2",
+  "scripts": {
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r --workspace-concurrency=1 test",
+    "contracts:build": "cd packages/contracts && forge build",
+    "contracts:test": "cd packages/contracts && forge test -j 1",
+    "zk:test": "cd packages/zk && PATH=$HOME/.nargo/bin:$PATH nargo test --workspace",
+    "zk:verifier": "packages/zk/scripts/gen-verifier.sh",
+    "deploy:testnet": "node scripts/deploy.ts testnet",
+    "deploy:mainnet": "node scripts/deploy.ts mainnet",
+    "e2e:fork": "node scripts/e2e-fork.ts",
+    "relayer": "pnpm --filter @kakushi/relayer start",
+    "dev": "pnpm --filter @kakushi/app dev"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "viem": "^2.38.0"
+  }
+}

@@ -1,0 +1,27 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.log
+.DS_Store
+# build output
+.next/
+dist/
+out/
+cache/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+.turbo/
+# Noir compile output (the checked-in verifier and circuits/shielded_withdraw.json are generated from it)
+packages/zk/target/
+# forge
+packages/contracts/broadcast/
+# local run state (pids, logs of fork/dev server/relayer)
+.run/
+# local-only deployment records (forks); real ones are deployments/arc-testnet.json and arc-mainnet.json
+deployments/*.local.json
+deployments/*.fork.json
