@@ -128,7 +128,7 @@ function RelayVisual() {
     const timers = [1, 2, 3].map((n) => setTimeout(() => setStep(n), 300 + n * 500));
     return () => timers.forEach(clearTimeout);
   }, [seen, reduced]);
-  const rows = ["Proof made in your browser", "Relayer pays the gas", "Fresh wallet gets 9.89 USDC"];
+  const rows = ["Proof made in your browser", "Relayer pays the gas", "Fresh wallet gets 0.87 USDC"];
   return (
     <div ref={ref} className="flex h-full flex-col justify-center gap-2.5 p-5">
       {rows.map((r, i) => (
@@ -139,7 +139,7 @@ function RelayVisual() {
           {r}
         </div>
       ))}
-      <p className="text-center text-[12px] text-ui-muted">Fee 0.11 USDC, inside the proof</p>
+      <p className="text-center text-[12px] text-ui-muted">Example from the live 1 USDC pool: fee 0.13 USDC, inside the proof</p>
     </div>
   );
 }

@@ -13,7 +13,7 @@ export type MoneyParts = {
 
 const SYMBOLS: Record<string, string> = {
   USD: "$",
-  AUSD: "$",
+  USDC: "$",
   EUR: "€",
   GBP: "£",
   INR: "₹",

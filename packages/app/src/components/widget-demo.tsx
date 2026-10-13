@@ -9,7 +9,7 @@ import { useDeployment } from "@/lib/privacy";
 import { useRuntime } from "@/lib/runtime";
 import { useWallet } from "@/lib/wallet";
 
-/** A sample checkout with the real widget: pays the merchant privately, in USDC, on Arc. */
+/** A sample checkout (a made-up shop) with the real widget: pays the merchant privately, in USDC, on Arc. */
 export function WidgetDemo() {
   const { client, cfg } = useRuntime();
   const w = useWallet();
@@ -20,13 +20,13 @@ export function WidgetDemo() {
     if (w.address && !to) setTo(w.address);
   }, [w.address, to]);
   if (!deployment || !client || !cfg) {
-    return <p className="text-[14px] text-ui-muted">The live demo appears once the Kakushi contracts are deployed on this network.</p>;
+    return <p className="text-[14px] text-ui-muted">The demo appears once the Kakushi contracts are deployed on this network.</p>;
   }
   return (
     <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="rounded-[24px] bg-white p-6 text-[#13141f]">
         <div className="flex items-center gap-2 text-[13px] text-[#6e7080]">
-          <Coffee size={15} /> Any shop&rsquo;s checkout
+          <Coffee size={15} /> Sample checkout (real payment, testnet USDC)
         </div>
         <div className="mt-3 flex items-baseline justify-between">
           <span className="text-[18px] font-medium">Flat white</span>

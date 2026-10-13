@@ -5,7 +5,7 @@ import { cn } from "../lib/cn";
 
 export type CheckItem = {
   key: string;
-  /** What is checked: "AUSD/USD", "Free pool cash". */
+  /** What is checked: "USDC/USD", "Free pool cash". */
   label: ReactNode;
   /** The observed figure: "$0.9998". */
   value: ReactNode;
@@ -28,7 +28,7 @@ export type CheckListProps = {
  * checks, readiness lists and the like.
  *
  * ```tsx
- * <CheckList items={[{ key: "price", label: "AUSD/USD", value: "$0.9998", limit: "at least $0.995", ok: true }]} />
+ * <CheckList items={[{ key: "price", label: "USDC/USD", value: "$0.9998", limit: "at least $0.995", ok: true }]} />
  * ```
  */
 export function CheckList({ items, className, ...props }: CheckListProps) {

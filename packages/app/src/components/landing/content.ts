@@ -1,5 +1,5 @@
 /**
- * Kakushi landing copy (Arc). Everything here is a claim the code and docs/E2E-FORK.md back up.
+ * Kakushi landing copy (Arc). Everything here is a claim the code and docs/E2E-TESTNET.md (live Arc testnet) or docs/E2E-FORK.md (fork) back up.
  */
 
 export const nav = {
@@ -37,7 +37,7 @@ export const stack = {
   cards: [
     { key: "gas", engine: "USDC as gas", title: "No gas token to link", items: ["A stealth address that holds only USDC can still send transactions", "The relayer is repaid in the same asset it spends", "No ETH-style top-up that ties a fresh wallet to an old one"] },
     { key: "usdc", engine: "Native USDC", title: "6 and 18 decimals, handled", items: ["Pools hold the 6-decimal ERC-20 at 0x3600…0000", "Relayer fees convert 18-decimal gas cost to USDC units", "Tested against Circle's FiatToken v2.2 bytecode"] },
-    { key: "final", engine: "Deterministic finality", title: "Done in under a second", items: ["Shield, pay and relay without waiting for confirmations", "A proof is verified on-chain in one transaction", "Withdrawals measured at about 3.6M gas, a few cents"] },
+    { key: "final", engine: "Deterministic finality", title: "Final in under a second", items: ["Arc's published finality is sub-second, so a payment is done when it lands", "A proof is verified on-chain in one transaction", "A withdrawal measured about 3.6M gas, roughly 0.09 USDC on testnet"] },
   ],
 } as const;
 
@@ -104,7 +104,7 @@ await relayWithdraw(relayerUrl, { chainId, pool, proof, args: { ...w, recipient:
 export const fees = {
   eyebrow: "Fees",
   line: "No protocol cut. Gas, and a relayer fee you can see.",
-  sub: "A gasless withdrawal pays the relayer a fee shown before you sign (about 0.11 USDC at today's Arc gas price); withdraw from your own wallet and pay only gas.",
+  sub: "A gasless withdrawal pays the relayer a fee shown before you sign (about 0.13 USDC on the 1 USDC pool at the testnet gas price we measured); withdraw from your own wallet and pay only gas.",
   compare: "Open source, MIT. No API key.",
 };
 

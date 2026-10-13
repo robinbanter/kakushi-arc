@@ -101,7 +101,7 @@ function Register({ meta }: { meta: string }) {
     }
   }
   return state === "on" ? (
-    <StatusPill tone="lime" size="sm">Listed on {cfg?.chainName ?? "Arc"}: anyone can pay your wallet address</StatusPill>
+    <StatusPill tone="lime" size="sm">Listed on {cfg?.chainName ?? "Arc"}: anyone can pay your address</StatusPill>
   ) : (
     <SecondaryButton size="sm" loading={state === "busy"} disabled={state === "unknown"} onClick={register}>
       List my address on {cfg?.chainName ?? "Arc"} (one transaction)
