@@ -124,7 +124,7 @@ export default function ReceivePage() {
     setScan({ busy: true, found: null, err: null });
     try {
       const latest = await client.getBlockNumber();
-      const matches = await scanAnnouncements(client as PublicClient, deployment.stealthAnnouncer, BigInt(deployment.deployBlock), latest, { viewingKey: keys.viewingKey, spendingPublicKey: keys.spendingPublicKey, spendingKey: keys.spendingKey }, { withBalances: true });
+      const matches = await scanAnnouncements(client as PublicClient, deployment.stealthAnnouncer, BigInt(deployment.deployBlock), latest, { viewingKey: keys.viewingKey, spendingPublicKey: keys.spendingPublicKey, spendingKey: keys.spendingKey }, { withBalances: true, concurrency: 6 });
       setScan({ busy: false, found: matches.sort((a, b) => Number(b.blockNumber - a.blockNumber)), err: null });
     } catch (e) {
       setScan({ busy: false, found: null, err: readError((e as Error).message) });

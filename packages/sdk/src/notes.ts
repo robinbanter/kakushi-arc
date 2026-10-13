@@ -150,21 +150,25 @@ export class IncrementalMerkleTree {
    * (default 5000). Leaves must be 0..n-1 with no gaps, so start at the pool's
    * deploy block.
    */
-  static async fromDeposits(client: PublicClient, pool: Hex, fromBlock: bigint, toBlock?: bigint, opts: { chunk?: bigint } = {}): Promise<IncrementalMerkleTree> {
+  static async fromDeposits(client: PublicClient, pool: Hex, fromBlock: bigint, toBlock?: bigint, opts: { chunk?: bigint; concurrency?: number } = {}): Promise<IncrementalMerkleTree> {
     const chunk = opts.chunk ?? 5000n;
     if (chunk < 1n) throw new Error("chunk must be positive");
     const end = toBlock ?? (await client.getBlockNumber());
     const event = kakushiPoolAbi.find((x) => x.type === "event" && x.name === "Deposit")!;
     const byIndex = new Map<number, bigint>();
-    for (let from = fromBlock; from <= end; from += chunk) {
-      const to = from + chunk - 1n > end ? end : from + chunk - 1n;
-      const logs = await client.getLogs({ address: pool, event, fromBlock: from, toBlock: to });
-      for (const l of logs) {
-        const { commitment, leafIndex } = l.args as { commitment?: Hex; leafIndex?: number };
-        if (commitment === undefined || leafIndex === undefined) continue;
-        const prev = byIndex.get(leafIndex);
-        if (prev !== undefined && prev !== BigInt(commitment)) throw new Error(`conflicting deposits at leaf ${leafIndex}`);
-        byIndex.set(leafIndex, BigInt(commitment));
+    const ranges: [bigint, bigint][] = [];
+    for (let from = fromBlock; from <= end; from += chunk) ranges.push([from, from + chunk - 1n > end ? end : from + chunk - 1n]);
+    const width = Math.max(1, opts.concurrency ?? 1);
+    for (let i = 0; i < ranges.length; i += width) {
+      const groups = await Promise.all(ranges.slice(i, i + width).map(([from, to]) => client.getLogs({ address: pool, event, fromBlock: from, toBlock: to })));
+      for (const logs of groups) {
+        for (const l of logs) {
+          const { commitment, leafIndex } = l.args as { commitment?: Hex; leafIndex?: number };
+          if (commitment === undefined || leafIndex === undefined) continue;
+          const prev = byIndex.get(leafIndex);
+          if (prev !== undefined && prev !== BigInt(commitment)) throw new Error(`conflicting deposits at leaf ${leafIndex}`);
+          byIndex.set(leafIndex, BigInt(commitment));
+        }
       }
     }
     const tree = new IncrementalMerkleTree();

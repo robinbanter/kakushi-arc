@@ -328,6 +328,8 @@ export interface ScanOptions {
   schemeId?: bigint;
   /** also read each match's current balance */
   withBalances?: boolean;
+  /** parallel eth_getLogs requests (default 1; the app uses 6 because Arc's public RPC caps a range at ~5000 blocks) */
+  concurrency?: number;
   onProgress?: (scannedTo: bigint) => void;
 }
 
@@ -341,33 +343,38 @@ export async function scanAnnouncements(client: PublicClient, announcer: Hex, fr
   if (chunk < 1n) throw new Error("chunk must be positive");
   const event = erc5564AnnouncerAbi[0];
   const out: StealthMatch[] = [];
-  for (let from = fromBlock; from <= toBlock; from += chunk) {
-    const to = from + chunk - 1n > toBlock ? toBlock : from + chunk - 1n;
-    const logs = await client.getLogs({ address: announcer, event, args: { schemeId: opts.schemeId ?? STEALTH_SCHEME_ID }, fromBlock: from, toBlock: to });
-    for (const l of logs) {
-      const a = l.args;
-      if (!a.stealthAddress || !a.ephemeralPubKey || a.metadata === undefined || !a.caller) continue;
-      if (!checkStealthAddress({ stealthAddress: a.stealthAddress, ephemeralPubKey: a.ephemeralPubKey, metadata: a.metadata }, keys.viewingKey, keys.spendingPublicKey)) continue;
-      let md: StealthMetadata = { viewTag: -1 };
-      try {
-        md = decodeStealthMetadata(a.metadata);
-      } catch {
-        /* empty metadata: address matched anyway */
+  const ranges: [bigint, bigint][] = [];
+  for (let from = fromBlock; from <= toBlock; from += chunk) ranges.push([from, from + chunk - 1n > toBlock ? toBlock : from + chunk - 1n]);
+  const width = Math.max(1, opts.concurrency ?? 1);
+  for (let i = 0; i < ranges.length; i += width) {
+    const group = ranges.slice(i, i + width);
+    const results = await Promise.all(group.map(([from, to]) => client.getLogs({ address: announcer, event, args: { schemeId: opts.schemeId ?? STEALTH_SCHEME_ID }, fromBlock: from, toBlock: to })));
+    results.forEach((logs, gi) => {
+      for (const l of logs) {
+        const a = l.args;
+        if (!a.stealthAddress || !a.ephemeralPubKey || a.metadata === undefined || !a.caller) continue;
+        if (!checkStealthAddress({ stealthAddress: a.stealthAddress, ephemeralPubKey: a.ephemeralPubKey, metadata: a.metadata }, keys.viewingKey, keys.spendingPublicKey)) continue;
+        let md: StealthMetadata = { viewTag: -1 };
+        try {
+          md = decodeStealthMetadata(a.metadata);
+        } catch {
+          /* empty metadata: address matched anyway */
+        }
+        const m: StealthMatch = {
+          ...md,
+          stealthAddress: getAddress(a.stealthAddress),
+          ephemeralPublicKey: a.ephemeralPubKey,
+          caller: a.caller,
+          metadata: a.metadata,
+          blockNumber: l.blockNumber!,
+          txHash: l.transactionHash!,
+          logIndex: l.logIndex!,
+        };
+        if (keys.spendingKey) m.stealthPrivateKey = computeStealthPrivateKey(keys.spendingKey, keys.viewingKey, a.ephemeralPubKey);
+        out.push(m);
       }
-      const m: StealthMatch = {
-        ...md,
-        stealthAddress: getAddress(a.stealthAddress),
-        ephemeralPublicKey: a.ephemeralPubKey,
-        caller: a.caller,
-        metadata: a.metadata,
-        blockNumber: l.blockNumber!,
-        txHash: l.transactionHash!,
-        logIndex: l.logIndex!,
-      };
-      if (keys.spendingKey) m.stealthPrivateKey = computeStealthPrivateKey(keys.spendingKey, keys.viewingKey, a.ephemeralPubKey);
-      out.push(m);
-    }
-    opts.onProgress?.(to);
+      opts.onProgress?.(group[gi]![1]);
+    });
   }
   if (opts.withBalances) {
     for (const m of out) m.balance = await stealthBalance(client, m.stealthAddress, m.kind === "erc20" ? m.token : undefined);

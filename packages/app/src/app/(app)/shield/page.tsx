@@ -144,7 +144,7 @@ function Withdraw({ pools }: { pools: PoolInfo[] }) {
     setDone(null);
     try {
       setStage("Reading the pool…");
-      const tree = await IncrementalMerkleTree.fromDeposits(client as PublicClient, pool.address, BigInt(deployment.deployBlock));
+      const tree = await IncrementalMerkleTree.fromDeposits(client as PublicClient, pool.address, BigInt(deployment.deployBlock), undefined, { concurrency: 6 });
       const relayerAddr = viaRelayer ? relayer!.address : (zeroAddress as Hex);
       const fee = viaRelayer ? relayFee : 0n;
       const wit = withdrawWitness(note, tree, { recipient: recipient as Hex, relayer: relayerAddr, fee });
