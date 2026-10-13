@@ -57,7 +57,7 @@ export class Relayer {
     this.pools = opts.pools;
     this.minFee = opts.minFee ?? 10_000n;
     this.maxFeeBps = opts.maxFeeBps ?? 3000n;
-    this.quoteGas = opts.quoteGas ?? 7_000_000n;
+    this.quoteGas = opts.quoteGas ?? 4_300_000n;
     this.log = opts.log ?? ((m) => console.log(`[relayer] ${m}`));
     const c = chainByNetwork(opts.network);
     this.chainId = c.chainId;
@@ -136,4 +136,16 @@ export class Relayer {
   }
 }
 
-const oneLine = (e: unknown): string => errText(e).replace(/\s+/g, " ").trim();
+/** Arc's node reports pool reverts as raw selectors; name the ones a user can act on. */
+const KNOWN_ERRORS: Record<string, string> = {
+  "0x2d8b76eb": "this note was already spent (NullifierSpent)",
+  "0x8730d7c8": "the proof's Merkle root is not one of the pool's recent roots (UnknownRoot)",
+  "0x09bde339": "the proof does not verify for these recipient/relayer/fee values (InvalidProof)",
+  "0x90b8ec18": "the USDC transfer failed, e.g. a blocklisted recipient (TransferFailed)",
+  "0xe757126a": "the fee is larger than the note (FeeTooHigh)",
+};
+const oneLine = (e: unknown): string => {
+  const text = errText(e).replace(/\s+/g, " ").trim();
+  const hit = Object.entries(KNOWN_ERRORS).find(([sel]) => text.includes(sel));
+  return hit ? `${hit[1]} [${text.slice(0, 120)}]` : text;
+};

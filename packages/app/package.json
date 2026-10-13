@@ -1,0 +1,41 @@
+{
+  "name": "@kakushi/app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kakushi web app for Arc: send, receive, shield and withdraw USDC privately.",
+  "scripts": {
+    "dev": "node scripts/sync-deployments.mjs && next dev -p ${PORT:-9210}",
+    "build": "node scripts/sync-deployments.mjs && next build",
+    "start": "next start -p ${PORT:-9210}",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run test --maxWorkers=1"
+  },
+  "dependencies": {
+    "@kakushi/config": "workspace:*",
+    "@kakushi/sdk": "workspace:*",
+    "@kakushi/ui": "workspace:*",
+    "@kakushi/widget": "workspace:*",
+    "clsx": "2.1.1",
+    "lenis": "^1.3.26",
+    "lucide-react": "1.48.0",
+    "motion": "13.4.4",
+    "next": "16.3.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwind-merge": "3.7.0",
+    "viem": "^2.38.0",
+    "@kakushi/prover": "workspace:*",
+    "@aztec/bb.js": "5.0.0-nightly.20260522",
+    "@noir-lang/noir_js": "1.0.0-beta.22"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.20.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

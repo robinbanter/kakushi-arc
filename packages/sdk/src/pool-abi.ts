@@ -14,6 +14,15 @@
 import { parseAbi } from "viem";
 
 export const kakushiPoolAbi = parseAbi([
+  "error NullifierSpent(bytes32 nullifierHash)",
+  "error UnknownRoot(bytes32 root)",
+  "error InvalidProof()",
+  "error FeeTooHigh(uint256 fee, uint256 denomination)",
+  "error InvalidRecipient()",
+  "error NotAFieldElement()",
+  "error CommitmentExists(bytes32 commitment)",
+  "error TreeFull()",
+  "error TransferFailed()",
   "function deposit(bytes32 commitment)",
   "function withdraw(bytes proof, bytes32 root, bytes32 nullifierHash, address recipient, address relayer, uint256 fee)",
   "function publicInputs(bytes32 root, bytes32 nullifierHash, address recipient, address relayer, uint256 fee) view returns (bytes32[])",

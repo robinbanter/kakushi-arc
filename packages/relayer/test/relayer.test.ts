@@ -66,7 +66,7 @@ describe("validateRelayRequest", () => {
   });
 });
 
-/** a scripted Arc node: gas price 21 gwei, 7M gas per withdrawal */
+/** a scripted Arc node: gas price 21 gwei, 7M gas per withdrawal (deliberately above the quote assumption) */
 function fakeNode(opts: { revert?: boolean; gasPrice?: bigint } = {}) {
   const sent: Hex[] = [];
   const gasPrice = opts.gasPrice ?? 21_000_000_000n;
@@ -108,19 +108,19 @@ const mk = (n: ReturnType<typeof fakeNode>, extra: Partial<ConstructorParameters
   new Relayer({ account, pools, network: "testnet", transport: n.transport, log: () => {}, ...extra });
 
 describe("Relayer", () => {
-  it("quotes the fee in USDC units from gas: 7M gas at 21 gwei is about 0.18 USDC, not 1e18", async () => {
+  it("quotes the fee in USDC units from gas: 4.3M gas at 21 gwei is about 0.11 USDC, not 1e18", async () => {
     const info = await mk(fakeNode()).quote();
-    // 7_000_000 * 21e9 * 1.25 = 1.8375e17 wei = 183_750 USDC units
-    expect(info.feeByPool[POOL]).toBe("183750");
-    expect(info.feeByPool[BIG_POOL]).toBe("183750");
+    // 4_300_000 * 21e9 * 1.25 = 1.12875e17 wei = 112_875 USDC units
+    expect(info.feeByPool[POOL]).toBe("112875");
+    expect(info.feeByPool[BIG_POOL]).toBe("112875");
     expect(info.chainId).toBe(CHAIN);
   });
   it("floors the fee and drops pools where the fee is too large a share of the note", async () => {
     const cheap = await mk(fakeNode({ gasPrice: 1_000_000_000n })).quote();
     expect(cheap.feeByPool[POOL]).toBe("10000"); // the floor
-    const dear = await mk(fakeNode({ gasPrice: 100_000_000_000n })).quote(); // 100 gwei: 0.875 USDC
-    expect(dear.feeByPool[POOL]).toBeUndefined(); // 0.875 of a 1 USDC note is too much
-    expect(dear.feeByPool[BIG_POOL]).toBe("875000");
+    const dear = await mk(fakeNode({ gasPrice: 200_000_000_000n })).quote(); // 200 gwei: 4.3M * 200e9 * 1.25 = 1.075 USDC
+    expect(dear.feeByPool[POOL]).toBeUndefined(); // more than the whole 1 USDC note
+    expect(dear.feeByPool[BIG_POOL]).toBe("1075000");
   });
   it("reports its balance in USDC units", async () => {
     expect(await mk(fakeNode()).balance()).toBe(2_000_000n);
@@ -167,7 +167,7 @@ describe("server", () => {
   it("serves /health, /info and /relay", async () => {
     expect(await (await fetch(`${base}/health`)).json()).toMatchObject({ ok: true, address: account.address, balanceUsdc: "2000000" });
     const info = await (await fetch(`${base}/info`)).json();
-    expect(info.feeByPool[POOL]).toBe("183750");
+    expect(info.feeByPool[POOL]).toBe("112875");
     const r = await fetch(`${base}/relay`, { method: "POST", body: JSON.stringify(body()) });
     expect(r.status).toBe(200);
     expect((await r.json()).txHash).toMatch(/^0x[0-9a-f]{64}$/);

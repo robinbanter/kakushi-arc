@@ -14,8 +14,8 @@
     "contracts:test": "cd packages/contracts && forge test -j 1",
     "zk:test": "cd packages/zk && PATH=$HOME/.nargo/bin:$PATH nargo test --workspace",
     "zk:verifier": "packages/zk/scripts/gen-verifier.sh",
-    "deploy:testnet": "node scripts/deploy.ts testnet",
-    "deploy:mainnet": "node scripts/deploy.ts mainnet",
+    "deploy:testnet": "scripts/deploy.sh testnet",
+    "deploy:mainnet": "scripts/deploy.sh mainnet",
     "e2e:fork": "node scripts/e2e-fork.ts",
     "relayer": "pnpm --filter @kakushi/relayer start",
     "dev": "pnpm --filter @kakushi/app dev"

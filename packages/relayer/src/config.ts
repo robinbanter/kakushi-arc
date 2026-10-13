@@ -8,7 +8,7 @@
 //   RELAYER_HOST     bind address (default 127.0.0.1; put a reverse proxy in front)
 //   RELAYER_MIN_FEE  floor for every pool's fee, USDC base units (default 10000 = 0.01 USDC)
 //   RELAYER_MAX_FEE_BPS  refuse pools whose quoted fee exceeds this share of the denomination (default 3000 = 30%)
-//   RELAYER_QUOTE_GAS    gas assumed for one withdrawal when quoting (default 7000000; the real figure is measured per relay)
+//   RELAYER_QUOTE_GAS    gas assumed for one withdrawal when quoting (default 4300000: a withdrawal measures about 3.65M gas on Arc; the real figure is measured per relay)
 //   RELAYER_ALLOW_ORIGIN CORS origin for browsers (default *)
 import { readFileSync } from "node:fs";
 import { type Hex, getAddress } from "viem";
@@ -74,7 +74,7 @@ export function loadRelayerConfig(env: Record<string, string | undefined> = proc
     pools: poolsOf(d),
     minFee: uintEnv(env.RELAYER_MIN_FEE, 10_000n, "RELAYER_MIN_FEE"),
     maxFeeBps: uintEnv(env.RELAYER_MAX_FEE_BPS, 3000n, "RELAYER_MAX_FEE_BPS"),
-    quoteGas: uintEnv(env.RELAYER_QUOTE_GAS, 7_000_000n, "RELAYER_QUOTE_GAS"),
+    quoteGas: uintEnv(env.RELAYER_QUOTE_GAS, 4_300_000n, "RELAYER_QUOTE_GAS"),
     allowOrigin: env.RELAYER_ALLOW_ORIGIN ?? "*",
   };
 }
