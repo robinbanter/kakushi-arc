@@ -6,16 +6,25 @@ This repo is the zero-knowledge side of [Kakushi](https://github.com/nickthelege
 
 ## What works
 
-Proven on an Arc Foundry fork of Arc testnet with real signed transactions and real UltraHonk proofs ([`docs/E2E-FORK.md`](docs/E2E-FORK.md) has every transaction hash):
+Deployed on **Arc testnet** (chain 5042002, deploy block 67017441) and exercised there with real transactions and real UltraHonk proofs; every hash links to the explorer in [`docs/E2E-TESTNET.md`](docs/E2E-TESTNET.md). The same loop also runs on an Arc Foundry fork ([`docs/E2E-FORK.md`](docs/E2E-FORK.md)).
 
-| Step | What happens |
+| Step | What happens (live on testnet) |
 | --- | --- |
-| Shield | Alice deposits 10 USDC into a pool behind a commitment (`approve` + `deposit`). |
-| Send | Alice pays Bob 25 USDC in one `StealthPay.sendToken` transaction. The USDC lands on a one-time address that nothing on chain ties to Bob's wallet. |
-| Receive | Bob scans the ERC-5564 announcer with his viewing key, finds the payment, derives the stealth key, and shields 10 USDC from that address. The address held only USDC and paid its gas in USDC. |
-| Withdraw | A proof is generated, the relayer submits it, and a brand-new address with no balance receives 9.887125 USDC. The relayer is repaid in USDC from the note (0.112875), nets more than its gas, and the recipient never sends a transaction. Replays are refused. |
+| Shield | Alice deposits 1 USDC into the `USDC-1` pool behind a commitment (`approve` + `deposit`). |
+| Send | Alice pays Bob 0.1 USDC in one `StealthPay.sendToken` transaction. The USDC lands on a one-time address that nothing on chain ties to Bob's wallet. |
+| Receive | Bob scans the ERC-5564 announcer through the public RPC (5,000-block pages), finds the payment and derives the stealth key. |
+| Withdraw | A proof is generated, a relayer submits it, and a brand-new address with no balance receives 0.865625 USDC. The relayer is repaid 0.134375 USDC from the note and the recipient never sends a transaction. Replays are refused. |
+| In the browser | The web app does the same through its UI: Receive finds the payment, Send pays a registered wallet, and Withdraw **proves in a web worker in about 12 s** and relays gaslessly (tx in `docs/E2E-TESTNET.md` section 7). |
 
-Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the generated Solidity verifier), 14 Noir circuit tests, 60 TypeScript tests (SDK, prover, relayer, widget, config). The Foundry tests run Circle's FiatToken v2.2 bytecode etched at `0x3600…0000` with the same `USDC`/`2` EIP-712 domain, 6 decimals, blocklist and pause behavior as Arc's USDC.
+| Contract | Arc testnet |
+| --- | --- |
+| StealthRegistry (ERC-6538) | [`0xc79A4Aa7396c3e67ee461C3A92fFc4258e49361B`](https://explorer.testnet.arc.io/address/0xc79A4Aa7396c3e67ee461C3A92fFc4258e49361B) |
+| StealthAnnouncer (ERC-5564) | [`0x106364d30fBE8F05ca83b9c0F202EAE41b2C8a3e`](https://explorer.testnet.arc.io/address/0x106364d30fBE8F05ca83b9c0F202EAE41b2C8a3e) |
+| StealthPay | [`0x234384Adcbcbaf68145A42f13b0E666444961C0e`](https://explorer.testnet.arc.io/address/0x234384Adcbcbaf68145A42f13b0E666444961C0e) |
+| ShieldedWithdrawVerifier (UltraHonk) | [`0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120`](https://explorer.testnet.arc.io/address/0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120) |
+| KakushiPool USDC-1 / USDC-10 / USDC-100 | [`0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4`](https://explorer.testnet.arc.io/address/0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4) / [`0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c`](https://explorer.testnet.arc.io/address/0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c) / [`0x90bbBC5A461819620F5929eDa05e36814a7DB913`](https://explorer.testnet.arc.io/address/0x90bbBC5A461819620F5929eDa05e36814a7DB913) |
+
+Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the generated Solidity verifier), 14 Noir circuit tests, 62 TypeScript tests (SDK, prover, relayer, widget, config, app copy guard). The Foundry tests run Circle's FiatToken v2.2 bytecode etched at `0x3600…0000` with the same `USDC`/`2` EIP-712 domain, 6 decimals, blocklist and pause behavior as Arc's USDC.
 
 ## Arc stack
 
@@ -25,7 +34,7 @@ Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the ge
 | USDC ERC-20 at `0x3600…0000` (6 decimals) | The only pool asset. There are no native-coin pools: on Arc the native balance is the same USDC with 18-decimal accounting, and mixing the two would be off by 1e12. The relayer converts gas cost (18-dec wei) to fee units (6-dec) with `ceil(wei / 1e12)`. |
 | Deterministic sub-second finality | Shield, pay and relay without waiting for confirmations. |
 | Circle blocklist / FiatToken | A blocklisted recipient makes a withdrawal revert and the note stays unspent, so the holder can withdraw elsewhere (tested). |
-| Arc Foundry | Tests and the e2e run on `anvil --network arc` forks. |
+| Arc Foundry | Tests and the fork e2e run on `anvil --network arc` forks. |
 | Not used (next) | CCTP/Gateway funding from other chains, EIP-3009 gasless deposits, USYC yield on idle pool funds. Arc's own opt-in privacy sector is on Arc's roadmap and not live; Kakushi works today on the public EVM. |
 
 ## Architecture
@@ -51,6 +60,8 @@ pnpm install
 pnpm contracts:test      # 30 Foundry tests with real proofs (uses the FFI prover in packages/prover)
 pnpm zk:test             # 14 Noir tests;  pnpm zk:verifier --check  re-derives the verifier and fails on a diff
 pnpm test                # TypeScript tests
+# the full loop LIVE on Arc testnet (fresh keys in .run/, funded from DEPLOYER_ENV_FILE, about 2.6 USDC):
+node scripts/e2e-testnet.ts                                                  # writes docs/E2E-TESTNET.md
 # the full loop on a fork (one anvil at a time):
 anvil --network arc --fork-url https://rpc.testnet.arc.io --port 9200 &   # Arc Foundry's anvil
 ARC_RPC_URL=http://127.0.0.1:9200 node scripts/e2e-fork.ts                # writes docs/E2E-FORK.md
@@ -65,18 +76,18 @@ The app: `pnpm --filter @kakushi/app build` and `pnpm --filter @kakushi/app star
 ## Honest limits
 
 - **Not audited.** The Noir circuit and Solidity verifier come from the earlier Monad project and have had no external review. Pools are capped and immutable, so a bug cannot be patched and the cap is the damage limit.
-- **Not deployed to a public network yet.** The shared deployer wallet was unfunded; everything above ran on a fork. The deploy script is dry-run tested against live testnet and mainnet RPCs.
-- **Small anonymity sets.** Pools start empty. Privacy grows with the number of deposits in a pool; with a handful of notes, timing and amount can still link a deposit to a withdrawal.
+- **Testnet only.** It is deployed and exercised on Arc testnet; nothing is on Arc mainnet yet (`scripts/deploy.sh mainnet` is dry-run tested against the mainnet RPC). There is no hosted instance of the app: run it locally.
+- **Anonymity sets are empty.** The only deposits so far are our own two test deposits into `USDC-1` (same wallet, both already withdrawn), so today the pools give no real privacy. Privacy grows with the number of independent deposits; with a handful of notes, timing and amount can still link a deposit to a withdrawal.
 - **What stays public.** A stealth payment hides who the recipient is, not the amount or the sender. Pool deposits and withdrawals are public transactions; the proof hides which deposit a withdrawal spends.
-- **The relayer is one operator.** It cannot steal funds (recipient, relayer and fee are bound in the proof) but it can censor or go offline. Anyone can withdraw from their own wallet instead, paying USDC gas. A relayer fee of about 0.11 USDC is a large share of the 1 USDC pool, so the relayer omits pools where the fee exceeds 30% of the note.
+- **The relayer is one operator.** It cannot steal funds (recipient, relayer and fee are bound in the proof) but it can censor or go offline. Anyone can withdraw from their own wallet instead, paying USDC gas. The live relayer quoted 0.134375 USDC per withdrawal (13% of the 1 USDC pool, the price of about 3.64M gas), so the relayer omits pools where the fee exceeds 30% of the note.
 - **Circle controls USDC.** Circle can blocklist or pause USDC, which would freeze the pools like every USDC contract.
 - **Your note is your funds.** Lose it and nothing recovers the deposit.
-- **Browser proving** is built (a web worker running noir_js and bb.js) and typechecks and builds, but I verified proofs end to end in Node and forge, not in a browser wallet session.
+- **Browser proving** works: one withdrawal was proved in a web worker in headless Chromium (12.0 s, 15 s click to done) and settled on testnet. It was driven by a scripted wallet stand-in, not a real MetaMask session, and not measured on a phone.
 - **Receive scans from the deploy block** in 5,000-block `eth_getLogs` pages (Arc's public RPC limit), 6 in parallel. Fine for a beta; a private RPC or an indexer is the next step.
 
-## Next: FHE
+## Next: FHE (not shipped)
 
-The original Kakushi also has an FHE side (encrypted balances and amounts on a tfhe-rs engine with a coprocessor and KMS) that hides how much is paid, not just who. It is not part of this port: it needs its own engine and key custody and has no Arc deployment, so the next step is to bring it up on Arc and combine an encrypted amount with a stealth address.
+The original Kakushi also has an FHE side (encrypted balances and amounts on a tfhe-rs engine with a coprocessor and KMS) that hides how much is paid, not just who. It is **not** part of this port and nothing here is encrypted-balance technology: it needs its own engine and key custody and has no Arc deployment, so the next step is to bring it up on Arc and combine an encrypted amount with a stealth address.
 
 ## License
 
