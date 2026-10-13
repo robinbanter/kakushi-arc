@@ -1,0 +1,31 @@
+{
+  "chainId": 5042002,
+  "deployBlock": 67017441,
+  "deployer": "0x0648aDF1967692A0c991d7715b0b588452321FBd",
+  "network": "testnet",
+  "pools": {
+    "USDC-1": {
+      "address": "0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4",
+      "decimals": 6,
+      "denomination": "1000000",
+      "maxDeposits": 5000
+    },
+    "USDC-10": {
+      "address": "0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c",
+      "decimals": 6,
+      "denomination": "10000000",
+      "maxDeposits": 2000
+    },
+    "USDC-100": {
+      "address": "0x90bbBC5A461819620F5929eDa05e36814a7DB913",
+      "decimals": 6,
+      "denomination": "100000000",
+      "maxDeposits": 1000
+    }
+  },
+  "shieldedVerifier": "0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120",
+  "stealthAnnouncer": "0x106364d30fBE8F05ca83b9c0F202EAE41b2C8a3e",
+  "stealthPay": "0x234384Adcbcbaf68145A42f13b0E666444961C0e",
+  "stealthRegistry": "0xc79A4Aa7396c3e67ee461C3A92fFc4258e49361B",
+  "usdc": "0x3600000000000000000000000000000000000000"
+}
