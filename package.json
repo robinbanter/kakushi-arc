@@ -17,6 +17,7 @@
     "deploy:testnet": "scripts/deploy.sh testnet",
     "deploy:mainnet": "scripts/deploy.sh mainnet",
     "e2e:fork": "node scripts/e2e-fork.ts",
+    "e2e:testnet": "node scripts/e2e-testnet.ts",
     "relayer": "pnpm --filter @kakushi/relayer start",
     "dev": "pnpm --filter @kakushi/app dev"
   },
