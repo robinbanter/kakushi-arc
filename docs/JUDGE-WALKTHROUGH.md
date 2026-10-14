@@ -2,7 +2,9 @@ Hosted Arc testnet: https://kakushi-arc.vercel.app. [Hosting checks](HOSTED.md).
 
 # Judge walkthrough
 
-Review the evidence without a wallet. To repeat live payments, use an Arc testnet wallet with USDC; the smallest shield deposit is 1 USDC plus gas.
+Start on the [hosted app](https://kakushi-arc.vercel.app), click “Try a private payment”, and follow the three steps. A fresh wallet can get USDC from the linked Circle faucet (choose Arc Testnet), unlock Receive, list its address, then return to the widget. Review the evidence without a wallet. To repeat live payments, use an Arc testnet wallet with USDC; the smallest shield deposit is 1 USDC plus gas.
+
+Latest: [round-2 hosted browser receipts](E2E-TESTNET.md#round-2-hosted-browser-product-pass). Rerun the read-only browser check with `pnpm e2e:browser`.
 
 ## 1. See the proof (30 seconds)
 

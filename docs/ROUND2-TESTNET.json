@@ -1,0 +1,314 @@
+{
+  "scope": "Live Arc testnet; fresh EIP-1193 automation wallet on hosted Vercel origin; no mainnet calls",
+  "browser": {
+    "base": "https://kakushi-arc.vercel.app",
+    "at": "2026-10-14T15:22:10.705Z",
+    "routes": [
+      {
+        "route": "/",
+        "width": 1440,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/send",
+        "width": 1440,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/receive",
+        "width": 1440,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/shield",
+        "width": 1440,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/developers",
+        "width": 1440,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/",
+        "width": 390,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/send",
+        "width": 390,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/receive",
+        "width": 390,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/shield",
+        "width": 390,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      },
+      {
+        "route": "/developers",
+        "width": 390,
+        "status": 200,
+        "overflow": false,
+        "brokenImages": [],
+        "isolated": true
+      }
+    ],
+    "navigation": [
+      {
+        "width": 1440,
+        "name": "Pay",
+        "ok": true
+      },
+      {
+        "width": 1440,
+        "name": "Receive",
+        "ok": true
+      },
+      {
+        "width": 1440,
+        "name": "Shield",
+        "ok": true
+      },
+      {
+        "width": 1440,
+        "name": "Developers",
+        "ok": true
+      },
+      {
+        "width": 390,
+        "name": "Pay",
+        "ok": true
+      },
+      {
+        "width": 390,
+        "name": "Receive",
+        "ok": true
+      },
+      {
+        "width": 390,
+        "name": "Shield",
+        "ok": true
+      },
+      {
+        "width": 390,
+        "name": "Developers",
+        "ok": true
+      }
+    ],
+    "errors": [],
+    "developerTabs": [
+      "arc.ts",
+      "Checkout.tsx",
+      "send.ts"
+    ],
+    "live": {
+      "wallet": "0x173a4Cd430ab10DcE6a05AEce209ee3663FA5A0c",
+      "recipient": "0xb5c3b33B056eA8831C1139a837124996BA67a831",
+      "transactions": [
+        {
+          "step": "registerKeys",
+          "hash": "0x27bb82abf7cf4f9829b7fe13ae10247cdac84b7e8494d83a51f5854e14795277",
+          "gasUsdc": "0.0028829",
+          "status": "success",
+          "block": "67179863"
+        },
+        {
+          "step": "approve",
+          "hash": "0x047c60881da12c4aa3b22f546214a4439c83475a9cded99d668c88f309d4a60d",
+          "gasUsdc": "0.00138565",
+          "status": "success",
+          "block": "67179869"
+        },
+        {
+          "step": "sendToken",
+          "hash": "0xb2c0f8217fde61bd909c4e6c6f218688f7d95295649b31af26c9dfdd139d38b3",
+          "gasUsdc": "0.0024526",
+          "status": "success",
+          "block": "67179872"
+        },
+        {
+          "step": "move",
+          "hash": "0xa3833574dabe4a5fdaed932fa98c7510670615b41c7fbc508b0f341be0643845",
+          "status": "success",
+          "block": "67179912",
+          "gasUsdc": "0.00122345"
+        },
+        {
+          "step": "approve",
+          "hash": "0xcb9f7c583deb67f0249ef58244e8682c2afc2d42b7b2eedafc778f9cc46f266a",
+          "gasUsdc": "0.00138565",
+          "status": "success",
+          "block": "67179919"
+        },
+        {
+          "step": "sendToken",
+          "hash": "0x4111afbe85ed6552852876148cf0fd14e91da122efab43a99d6e349b13980272",
+          "gasUsdc": "0.0024503",
+          "status": "success",
+          "block": "67179922"
+        },
+        {
+          "step": "approve",
+          "hash": "0x135c88a0e3a67c9f2665ccec1f9f87f2c08f118c0311894a3c557a7de7c2412c",
+          "gasUsdc": "0.00138595",
+          "status": "success",
+          "block": "67179929"
+        },
+        {
+          "step": "deposit",
+          "hash": "0xfd64b466cd52ad1a6a7006424594c1e25a088ff599b8a84a4d85e91832ec9d8d",
+          "gasUsdc": "0.014144025",
+          "status": "success",
+          "block": "67179932"
+        },
+        {
+          "step": "hosted-browser-proof-relay",
+          "hash": "0xd5507dc878c2a560e0c72f2ad4eb76e50e7f156ed15612df04d3dae55f760957",
+          "gasUsdc": "0.09105735",
+          "status": "success",
+          "block": "67179982"
+        }
+      ],
+      "proofAssets": [
+        {
+          "url": "https://kakushi-arc.vercel.app/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+          "status": 200
+        },
+        {
+          "url": "https://kakushi-arc.vercel.app/_next/static/immutable/media/noirc_abi_wasm_bg.18zdby154mn3v.wasm",
+          "status": 200
+        },
+        {
+          "url": "https://kakushi-arc.vercel.app/_next/static/immutable/media/acvm_js_bg.0_uy9uvbajblp.wasm",
+          "status": 200
+        },
+        {
+          "url": "https://kakushi-arc.vercel.app/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+          "status": 200
+        },
+        {
+          "url": "https://kakushi-arc.vercel.app/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+          "status": 200
+        },
+        {
+          "url": "https://kakushi-arc.vercel.app/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+          "status": 200
+        }
+      ],
+      "errors": [],
+      "recipientBalanceBefore": "0",
+      "isolated": true,
+      "withdrawMs": 24894,
+      "recipientBalanceAfter": "0.865625",
+      "recipientNonce": 0
+    }
+  },
+  "funding": {
+    "payer": "0x173a4Cd430ab10DcE6a05AEce209ee3663FA5A0c",
+    "transactions": [
+      {
+        "step": "recycle-previous-test-recipient",
+        "hash": "0x3b742d5f20940806fc1cb879462c0375cfc0e96b5794e6aa5c8baa0da507eb92",
+        "amount": "0.86",
+        "gasUsdc": "0.000525",
+        "status": "success",
+        "block": "67179589"
+      },
+      {
+        "step": "deployer-top-up",
+        "hash": "0xe42f8fdba3fdd3a41643f91c0ed16df4152032c8209898564e8704406dda5089",
+        "amount": "0.25",
+        "gasUsdc": "0.000525",
+        "status": "success",
+        "block": "67179592"
+      }
+    ]
+  },
+  "sweep": {
+    "transactions": [
+      {
+        "address": "0x06D69B1A4AEcF62E66791d4Dd304e3C0F26266bB",
+        "hash": "0x3cdac6ed0069beccf6649a3810d2e814e18197783e096e59163d32cfb50da189",
+        "returnedUsdc": "0.009475",
+        "gasUsdc": "0.000525",
+        "remainingUsdc": "0",
+        "status": "success",
+        "block": "67180078"
+      },
+      {
+        "address": "0x173a4Cd430ab10DcE6a05AEce209ee3663FA5A0c",
+        "hash": "0x009f601c9e7d1b4913984162ed66f6c3bf060329d998d8046dbcb3e73937f2d6",
+        "returnedUsdc": "0.071670925",
+        "gasUsdc": "0.000525",
+        "remainingUsdc": "0",
+        "status": "success",
+        "block": "67180082"
+      },
+      {
+        "address": "0xb5c3b33B056eA8831C1139a837124996BA67a831",
+        "hash": "0xfb45bedb942907ab33ccdcab98c0f9130069d81b98479ae79a3d9da2d6a9f56c",
+        "returnedUsdc": "0.8651",
+        "gasUsdc": "0.000525",
+        "remainingUsdc": "0",
+        "status": "success",
+        "block": "67180085"
+      },
+      {
+        "address": "0xCDcaF8826074385AAD52436D9CDEcd59a26D4363",
+        "hash": "0xab96a0a54983f3008eae1ff0722bf8e802c38cea942129a98612cf6864758362",
+        "returnedUsdc": "0.004575",
+        "gasUsdc": "0.000525",
+        "remainingUsdc": "0",
+        "status": "success",
+        "block": "67180089"
+      }
+    ],
+    "dust": [
+      {
+        "address": "0x1997078d4a78c9e4474C2Af129BcA235DCE546AD",
+        "balance": "0.00049355"
+      }
+    ]
+  },
+  "budget": {
+    "newDeployerFundingUsdc": "0.25",
+    "newDeployerOutlayIncludingGasUsdc": "0.250525",
+    "totalGasAllTransactionsUsdc": "0.121517875",
+    "returnedToDeployerUsdc": "0.950820925",
+    "relayerFeeUsdc": "0.134375",
+    "residualStealthDustUsdc": "0.00049355",
+    "note": "0.86 USDC of existing prior-run principal recycled; all generated payer/recipient balances swept to zero. One stealth remainder is below transfer gas. Relayer retained its earned fee."
+  }
+}

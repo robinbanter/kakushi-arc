@@ -2,7 +2,7 @@
 
 **The privacy layer for Arc: drop private USDC payments into any app.** Integrate the source SDK with your own interface or embed `<KakushiPay>` beside your checkout. The widget resolves a recipient, approves USDC, pays a fresh stealth address and returns a confirmed receipt. Shielded pools and a gasless withdrawal relayer are separate building blocks when you need to break the deposit-to-withdrawal link.
 
-**Live (testnet):** stealth registration, payment, receive scan, shielding and browser-proved relayer withdrawal. **Fork:** local rehearsals are separate evidence. **Not run:** mainnet deployment. Stealth hides the recipient link; the sender and amount stay public. Independent pool deposits matter for privacy.
+**Live (testnet):** stealth registration, payment, receive scan, shielding and browser-proved relayer withdrawal. **Fork:** local rehearsals are separate evidence. **Not run in this round:** mainnet transactions. Existing mainnet evidence is [recorded separately](docs/MAINNET-DEPLOYMENT.md). Stealth hides the recipient link; the sender and amount stay public. Independent pool deposits matter for privacy.
 
 ## Integrate in three steps
 
@@ -84,7 +84,7 @@ The app: `pnpm --filter @kakushi/app build` and `pnpm --filter @kakushi/app star
 ## Honest limits
 
 - **Not audited.** The Noir circuit and Solidity verifier come from the earlier Monad project and have had no external review. Pools are capped and immutable, so a bug cannot be patched and the cap is the damage limit.
-- **Testnet only.** It is deployed and exercised on Arc testnet; nothing is on Arc mainnet yet (`scripts/deploy.sh mainnet` is dry-run tested against the mainnet RPC). The frontend and HTTP relayer are hosted at https://kakushi-arc.vercel.app; see [hosting checks](docs/HOSTED.md).
+- **This hosted demo uses testnet only.** Existing mainnet deployment evidence is separate; this product-quality round sent no mainnet transactions. The frontend and HTTP relayer are hosted at https://kakushi-arc.vercel.app; see [hosting checks](docs/HOSTED.md).
 - **Anonymity sets are small.** Recorded deposits are our own test transactions, so they do not demonstrate meaningful anonymity. Privacy grows with the number of independent deposits; with a handful of notes, timing and amount can still link a deposit to a withdrawal.
 - **What stays public.** A stealth payment hides who the recipient is, not the amount or the sender. Pool deposits and withdrawals are public transactions; the proof hides which deposit a withdrawal spends.
 - **The relayer is one operator.** It cannot steal funds (recipient, relayer and fee are bound in the proof) but it can censor or go offline. Anyone can withdraw from their own wallet instead, paying USDC gas. The live relayer quoted 0.134375 USDC per withdrawal (13% of the 1 USDC pool, the price of about 3.64M gas), so the relayer omits pools where the fee exceeds 30% of the note.
@@ -106,6 +106,10 @@ MIT.
 https://kakushi-arc.vercel.app — Next.js UI, RPC proxy and gasless withdrawal HTTP handler on Vercel. No always-on service. [Checks and limits](docs/HOSTED.md).
 
 <!-- MAINNET-ADDRESSES -->
+## Round 2: hosted product verification
+
+`pnpm e2e:browser` checks all five routes at 1440 and 390 px, every header item, faucet onboarding and the copied developer snippets. A fresh-wallet run also paid through the widget, scanned and moved USDC, deposited 1 USDC, and generated a browser proof on the hosted origin (5.3 s); the serverless relayer paid a zero-balance recipient 0.865625 USDC. [Receipts and budget](docs/E2E-TESTNET.md#round-2-hosted-browser-product-pass) · [judge scores](docs/JUDGE-REPORT.md).
+
 ## Addresses — live mainnet and testnet
 
 Mainnet **5042: Live**, deployed 2026-10-14. [All mainnet addresses and transaction receipts](docs/MAINNET-DEPLOYMENT.md).

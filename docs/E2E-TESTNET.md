@@ -109,3 +109,40 @@ Budget: one deployer top-up of **0.98 USDC**, funding gas **0.00122375 USDC**, t
 **Checks:** workspace typecheck PASS; 65 TypeScript tests PASS; Arc Foundry 30 tests PASS (real proofs); production build PASS; design detector no findings. `pnpm zk:test` was attempted but Nargo cannot lock `~/nargo/.package-cache` inside this session’s filesystem sandbox. The historical 14 Noir tests were not rerun successfully here; no circuit/verifier code changed.
 
 Raw receipts, balance checks, viewport results and test status: [`BROWSER-TESTNET.json`](BROWSER-TESTNET.json). All local servers started for this run were stopped. Source SDK/widget packages remain unpublished; anonymity sets remain test-sized; the relayer is a single operator; unaudited; FHE is next.
+
+
+## Round 2: hosted browser product pass
+
+2026-10-14, https://kakushi-arc.vercel.app, **Live (testnet)**, chain 5042002. No mainnet calls or broadcasts. Playwright drove the real hosted UI at 390 px (desktop Chromium mobile viewport), with 1440 px receipt captures and every route at both widths. A fresh EIP-1193 automation wallet signs in Node; no chain responses, transactions, notes or proofs are mocked. MetaMask/Rabby extension UX and physical mobile browsers: **Not run**.
+
+LEAD: RUN THESE (from repo root):
+
+```sh
+pnpm e2e:browser                    # read-only hosted routes, navigation, clipboard snippets, error states
+pnpm lint && pnpm typecheck && pnpm test
+pnpm --filter @kakushi/app build
+pnpm zk:test
+(cd packages/contracts && "../../../.tools/arcfoundry/forge" test -j 1)
+```
+
+To repeat live actions, use a fresh gitignored `.run/round2.env` with `PAYER_KEY` and `RECIPIENT_KEY`; pre-fund the payer with >1.05 testnet USDC and leave the recipient empty. Run `LIVE=1 pnpm e2e:browser`. This script does not fund wallets. It permits one registration, two 0.01 USDC payments, one 1 USDC deposit and their exact approvals; it refuses non-testnet signing. The Receive page signs its real stealth sweep itself. Save keys/notes locally and sweep leftover balances afterward. The already-used keys in this session were swept; a new live run requires fresh keys and a separately approved budget.
+
+Flow: connect the fresh wallet → unlock/list Receive → homepage widget payment → Receive finds 0.01 USDC → Move back → Pay sends another 0.01 USDC → Shield generates a note → denied clipboard write keeps Deposit disabled → download the note → deposit 1 USDC → paste note into Withdraw → browser proves → hosted serverless relayer submits.
+
+| Browser action | Explorer receipt | Gas USDC |
+|---|---|---|
+| registerKeys | [0x27bb82ab…](https://explorer.testnet.arc.io/tx/0x27bb82abf7cf4f9829b7fe13ae10247cdac84b7e8494d83a51f5854e14795277) | 0.0028829 |
+| approve | [0x047c6088…](https://explorer.testnet.arc.io/tx/0x047c60881da12c4aa3b22f546214a4439c83475a9cded99d668c88f309d4a60d) | 0.00138565 |
+| Widget · 0.01 USDC | [0xb2c0f821…](https://explorer.testnet.arc.io/tx/0xb2c0f8217fde61bd909c4e6c6f218688f7d95295649b31af26c9dfdd139d38b3) | 0.0024526 |
+| move | [0xa3833574…](https://explorer.testnet.arc.io/tx/0xa3833574dabe4a5fdaed932fa98c7510670615b41c7fbc508b0f341be0643845) | 0.00122345 |
+| approve | [0xcb9f7c58…](https://explorer.testnet.arc.io/tx/0xcb9f7c583deb67f0249ef58244e8682c2afc2d42b7b2eedafc778f9cc46f266a) | 0.00138565 |
+| Pay page · 0.01 USDC | [0x4111afbe…](https://explorer.testnet.arc.io/tx/0x4111afbe85ed6552852876148cf0fd14e91da122efab43a99d6e349b13980272) | 0.0024503 |
+| approve | [0x135c88a0…](https://explorer.testnet.arc.io/tx/0x135c88a0e3a67c9f2665ccec1f9f87f2c08f118c0311894a3c557a7de7c2412c) | 0.00138595 |
+| deposit | [0xfd64b466…](https://explorer.testnet.arc.io/tx/0xfd64b466cd52ad1a6a7006424594c1e25a088ff599b8a84a4d85e91832ec9d8d) | 0.014144025 |
+| hosted-browser-proof-relay | [0xd5507dc8…](https://explorer.testnet.arc.io/tx/0xd5507dc878c2a560e0c72f2ad4eb76e50e7f156ed15612df04d3dae55f760957) | 0.09105735 |
+
+Hosted proof: **5.3 seconds**, full withdrawal **24.894 seconds** including chain-log reconstruction and relay. `crossOriginIsolated=true`; COOP `same-origin`, COEP `require-corp`. Worker and both Noir WASM URLs returned **200**; no failed proof requests. Recipient 0xb5c3b33B056eA8831C1139a837124996BA67a831 started at **0**, received **0.865625 USDC**, and had **nonce 0 before the later cleanup sweep**. Fee **0.134375 USDC**. The spent note is omitted from committed evidence/screenshots.
+
+Budget: **0.250525 USDC** new deployer outlay including funding gas; reused **0.86 USDC** of the previous test recipient’s principal. All run transactions (funding, browser and cleanup) consumed **0.121517875 USDC** gas. Swept **0.950820925 USDC** back to the deployer; payer, recipient and prior recipient are zero. One stealth address retains **0.00049355 USDC**, below the **0.000525 USDC** transfer gas. Relayer keeps its earned fee. All sweep and funding explorer hashes: [ROUND2-TESTNET.json](ROUND2-TESTNET.json).
+
+10 route/viewport checks, 8 header navigation clicks, home links, hero anchor, code tabs, invalid-note and missing-wallet errors passed. Exact copied snippets match the files compiled by typecheck. Screens: [screens/testnet](screens/testnet/), prefixed `round2-`. No mock features or sample payment responses were introduced. 10/100 USDC deposits and self-paid withdrawals were **Not run** in this budget.

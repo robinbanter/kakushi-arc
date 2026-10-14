@@ -4,7 +4,7 @@
 
 Drop private USDC payments into any app. Kakushi gives Arc developers a source SDK and `<KakushiPay>` React widget: resolve a recipient, approve USDC and send to a fresh ERC-5564 stealth address. Recipients register through ERC-6538 and scan their payments. For unlinking deposits and withdrawals, fixed-size USDC pools use Noir/UltraHonk proofs generated in the browser. A relayer submits withdrawals and takes its quoted USDC fee from the note, so the recipient needs no gas.
 
-Live on Arc testnet: registration, widget payment, receive scan, shield and browser-proved relayer withdrawal. The landing page lets you try a real 0.01 USDC payment; Developers contains typechecked examples and contract links. Source packages are not on npm yet. Small anonymity sets, one relayer and unaudited software remain explicit limits. Sender and amount stay public; hidden amounts through FHE are next, not shipped. Mainnet is not deployed.
+Live on Arc testnet: registration, widget payment, receive scan, shield and browser-proved relayer withdrawal. The landing page lets you try a real 0.01 USDC payment; Developers contains typechecked examples and contract links. Source packages are not on npm yet. Small anonymity sets, one relayer and unaudited software remain explicit limits. Sender and amount stay public; hidden amounts through FHE are next, not shipped. The hosted demo uses testnet; existing mainnet deployment evidence is recorded separately.
 
 ## What it uses Arc for
 
