@@ -35,10 +35,11 @@ try{
   await page.getByRole('link',{name:'Try a private payment',exact:true}).click();assert.equal(new URL(page.url()).hash,'#try');
  }
  await page.goto(base+'/developers',{waitUntil:'networkidle'});
- report.developerTabs=await page.getByRole('tab').allTextContents();
- for(const tab of await page.getByRole('tab').all()){
+ const examples=page.locator('section[aria-labelledby="code-title"]');
+ report.developerTabs=await examples.getByRole('tab').allTextContents();
+ for(const tab of await examples.getByRole('tab').all()){
   const name=await tab.innerText();await tab.click();
-  await page.getByRole('button',{name:'Copy '+name+' snippet',exact:true}).click();
+  await examples.getByRole('button',{name:'Copy '+name+' snippet',exact:true}).click();
   const copied=await page.evaluate(()=>navigator.clipboard.readText());
   assert.equal(copied.trim(),readFileSync('packages/app/src/examples/'+name,'utf8').trim(),'Rendered snippet differs from compiled source');
  }

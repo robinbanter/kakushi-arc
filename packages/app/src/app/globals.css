@@ -16,24 +16,20 @@
   --font-satoshi: var(--font-satoshi-next), "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-/*
-  Kakushi's palette (after the Swyftx hero): navy-black ground, royal blue for
-  action, white pill CTAs, silver and gold only in the coins. The library's
-  "lime" tokens are its accent slot; here they carry the blue.
-*/
+/* Ink and indigo ground; violet action. Shared "lime" tokens carry the brand accent. */
 :root[data-theme="ref-e"] {
-  --ui-frame: #04060f;
-  --ui-canvas: #04060f;
-  --ui-surface-1: #0b0f1f;
-  --ui-surface-2: #121831;
+  --ui-frame: #0B0F1A;
+  --ui-canvas: #0B0F1A;
+  --ui-surface-1: #111728;
+  --ui-surface-2: #1B2440;
   --ui-surface-3: #1a2142;
   --ui-hairline: rgb(140 160 255 / 0.1);
   --ui-hairline-strong: rgb(140 160 255 / 0.17);
   --ui-text: #ffffff;
-  --ui-muted: #98a1bf;
+  --ui-muted: #b2b8cf;
   --ui-dim: #5c6585;
 
-  --ui-ink: #0b0f1f;
+  --ui-ink: #111728;
   --ui-on-ink: #ffffff;
   --ui-track: #161c36;
   --ui-up: #7d95ff;
@@ -45,18 +41,18 @@
   --ui-scrim: rgb(2 3 10 / 0.72);
   --ui-glass: rgb(11 15 31 / 0.82);
 
-  --ui-lime: #3b55ff;
-  --ui-lime-bright: #5770ff;
-  --ui-lime-logo: #3b55ff;
-  --ui-on-lime: #ffffff;
-  --ui-lime-button: #2f47f5;
+  --ui-lime: #7C6CFF;
+  --ui-lime-bright: #9588ff;
+  --ui-lime-logo: #7C6CFF;
+  --ui-on-lime: #0B0F1A;
+  --ui-lime-button: #7C6CFF;
   --ui-lime-text: #8ea5ff;
   --ui-lime-active: #c4d0ff;
   --ui-lime-chip: #121a3d;
   --ui-lime-chip-strong: #18224d;
   --ui-axis: #6c7595;
   --ui-square: #070a17;
-  --ui-swap: #04060f;
+  --ui-swap: #0B0F1A;
 
   --ui-pill-lime: #16205a;
   --ui-pill-lime-text: #c4d0ff;
@@ -73,18 +69,18 @@
 
   --ui-chart-top: #c4d0ff;
   --ui-chart-mid: #6f86ff;
-  --ui-chart-bottom: #2f47f5;
-  --ui-chart-fill: #2f47f5;
+  --ui-chart-bottom: #7C6CFF;
+  --ui-chart-fill: #7C6CFF;
 
   --ui-shadow-pop: 0 24px 60px -16px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(140 160 255 / 0.17);
   --ui-shadow-frame: none;
-  --ui-candle-panel: #04060f;
-  --ui-candle-chip: #0b0f1f;
-  --ui-candle-up: #5770ff;
+  --ui-candle-panel: #0B0F1A;
+  --ui-candle-chip: #111728;
+  --ui-candle-up: #9588ff;
   --ui-candle-down: #f2c27a;
   --ui-bar-fill: #1f2a6b;
   --ui-bar-low: #151d4d;
-  --ui-bar-selected: #3b55ff;
+  --ui-bar-selected: #7C6CFF;
 }
 
 /* Headlines are set in a serif, light and large, like the reference. Unlayered,
@@ -181,4 +177,31 @@ body {
     radial-gradient(1.5px 1.5px at 22% 78%, rgb(255 255 255 / 0.3), transparent 60%),
     radial-gradient(1px 1px at 64% 86%, rgb(255 255 255 / 0.35), transparent 60%);
   background-size: 640px 520px;
+}
+
+/* The courier leads; the interface stays quiet and legible. */
+.corps-hero { position: relative; isolation: isolate; min-height: 720px; display: flex; align-items: center; overflow: hidden; }
+.corps-hero-art { object-fit: cover; object-position: center; z-index: -2; }
+.corps-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(11 15 26 / .96), rgb(11 15 26 / .82) 32%, rgb(11 15 26 / .1) 72%), linear-gradient(0deg, #0B0F1A, transparent 24%); }
+.corps-hero-copy { width: 100%; max-width: 1200px; margin: auto; padding: 64px 24px 90px; }
+.corps-hero h1 { max-width: 650px; font-size: clamp(48px, 5.1vw, 74px); line-height: 1.06; text-wrap: balance; }
+.corps-hero-voice { margin-top: 28px; font-size: 24px; line-height: 1.45; }
+.corps-hero-description { margin-top: 18px; max-width: 470px; color: var(--ui-muted); font-size: 17px; line-height: 1.7; }
+.corps-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+.corps-steps li { border-top: 1px solid var(--ui-hairline-strong); padding-top: 22px; }
+.corps-step-number { font-family: var(--font-mono); color: #b9b0ff; font-size: 14px; }
+.corps-purpose { display: grid; grid-template-columns: 1.25fr 1fr; gap: 64px; align-items: center; }
+.corps-mascot { width: 100%; height: auto; }
+.corps-comparison { display: flex; flex-wrap: wrap; gap: 18px 48px; border-block: 1px solid var(--ui-hairline-strong); }
+input, textarea { caret-color: #b9b0ff; }
+* { scrollbar-color: #62698a #0B0F1A; }
+@media (max-width: 767px) {
+  .corps-hero { min-height: auto; padding-top: 240px; }
+  .corps-hero-art { object-fit: contain; object-position: top right; }
+  .corps-hero-shade { background: linear-gradient(0deg, #0B0F1A 60%, transparent 85%); }
+  .corps-hero-copy { padding: 24px 16px 48px; }
+  .corps-hero h1 { font-size: 46px; max-width: 580px; }
+  .corps-hero-voice { font-size: 21px; }
+  .corps-steps, .corps-purpose { grid-template-columns: 1fr; gap: 28px; }
+  .corps-mascot { max-width: 320px; justify-self: center; }
 }

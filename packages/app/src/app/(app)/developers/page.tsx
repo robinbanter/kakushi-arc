@@ -19,8 +19,12 @@ export default function DevelopersPage() {
     ...Object.entries(d.pools).map(([name, p]) => [`Shielded pool · ${name}`, p.address]),
   ] : [];
   return <article className="mx-auto max-w-[1100px] pt-8">
-    <h1 className="text-[clamp(44px,6vw,72px)] leading-tight">Private payments,<br />in your app.</h1>
+    <h1 className="text-[clamp(44px,6vw,72px)] leading-tight">Private execution tools.<br />Three lines to begin.</h1>
     <p className="mt-5 max-w-[70ch] text-lg leading-relaxed text-ui-muted">Use KakushiPay for React checkouts, or compose the SDK with your own interface. Stealth payments, shielded pools and gasless withdrawals are separate tools.</p>
+    <section className="mt-8" aria-label="Three-line integration">
+      <CodeBlock samples={[samples.find(s => s.key === "Checkout.tsx")!]} copyable />
+      <p className="mt-4 max-w-[75ch] text-ui-muted">Three integration lines after the client directive. Set up arc.ts below, install the source packages, and pass a registered recipient or stealth meta-address. This widget sends stealth payments; it does not shield funds.</p>
+    </section>
     <section className="mt-12" aria-labelledby="install-title">
       <h2 id="install-title" className="mb-4 text-2xl">1. Install from source</h2>
       <CodeBlock samples={[{ key: "install", label: "Install", filename: "Terminal", language: "bash", code: install }]} copyable />
@@ -39,6 +43,11 @@ export default function DevelopersPage() {
       <h2 id="pool-title" className="text-2xl">3. Add shielding when you need it</h2>
       <p className="mt-4 max-w-[75ch] leading-relaxed text-ui-muted">The widget sends a stealth payment; it does not shield funds. The <Link href="/shield" className="underline text-ui-text">Shield flow</Link> deposits fixed 1, 10 or 100 USDC notes. Save the note before depositing. Withdraw rebuilds the tree, proves in a browser worker and sends only the proof and public inputs to the relayer. The recipient needs no gas; the quoted relayer fee comes out of the note.</p>
       <p className="mt-3 text-ui-muted">Reference implementation: packages/app/src/app/(app)/shield/page.tsx and packages/app/src/lib/prove.worker.ts. SDK exports generateNote, withdrawWitness, IncrementalMerkleTree and relayWithdraw. Keep notes and stealth keys private.</p>
+    </section>
+    <section id="disclosure" className="mt-12 scroll-mt-8" aria-labelledby="disclosure-title">
+      <h2 id="disclosure-title" className="text-2xl">Viewing keys: disclose without spending authority</h2>
+      <p className="mt-4 max-w-[75ch] leading-relaxed text-ui-muted">SDK scanAnnouncements accepts viewingKey and spendingPublicKey without spendingKey. An auditor can identify incoming payments for that key, but cannot derive the stealth spending key. Share only those viewing credentials through a secure channel; never share spending keys, wallet signatures or shielded notes.</p>
+      <p className="mt-3 max-w-[75ch] leading-relaxed text-ui-muted">Disclosure covers payments discoverable with that key, including future payments while it remains in use. It is not a per-payment selective export and does not disclose shielded pool notes. Auditor export UI and a full compliance workflow are next.</p>
     </section>
     <section className="mt-12" aria-labelledby="contracts-title">
       <h2 id="contracts-title" className="text-2xl">Contracts · {cfg?.chainName ?? "loading"}</h2>

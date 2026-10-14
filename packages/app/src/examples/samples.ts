@@ -6,14 +6,14 @@ export default [
     "label": "arc.ts",
     "filename": "arc.ts",
     "language": "ts",
-    "code": "import { arcChain } from \"@kakushi/sdk\";\nimport { createPublicClient, createWalletClient, custom, http, type EIP1193Provider } from \"viem\";\n\nexport const chain = arcChain(\"testnet\");\nexport const deployment = {\n  stealthRegistry: \"0xc79A4Aa7396c3e67ee461C3A92fFc4258e49361B\",\n  stealthPay: \"0x234384Adcbcbaf68145A42f13b0E666444961C0e\",\n  usdc: \"0x3600000000000000000000000000000000000000\",\n} as const;\nexport const publicClient = createPublicClient({ chain, transport: http() });\n\n// Call from a user action. The widget asks the wallet to switch to Arc testnet.\nexport async function connectWallet() {\n  const provider = (window as unknown as { ethereum?: EIP1193Provider }).ethereum;\n  if (!provider) throw new Error(\"Install a browser wallet first\");\n  const wallet = createWalletClient({ chain, transport: custom(provider) });\n  const [account] = await wallet.requestAddresses();\n  if (!account) throw new Error(\"No wallet account selected\");\n  return createWalletClient({ account, chain, transport: custom(provider) });\n}\n"
+    "code": "import { arcChain } from \"@kakushi/sdk\";\nimport { createPublicClient, createWalletClient, custom, http, type EIP1193Provider } from \"viem\";\n\nexport const chain = arcChain(\"testnet\");\nexport const deployment = {\n  stealthRegistry: \"0xc79A4Aa7396c3e67ee461C3A92fFc4258e49361B\",\n  stealthPay: \"0x234384Adcbcbaf68145A42f13b0E666444961C0e\",\n  usdc: \"0x3600000000000000000000000000000000000000\",\n} as const;\nexport const publicClient = createPublicClient({ chain, transport: http() });\n\n// Call from a user action. The widget asks the wallet to switch to Arc testnet.\nexport async function connectWallet() {\n  const provider = (window as unknown as { ethereum?: EIP1193Provider }).ethereum;\n  if (!provider) throw new Error(\"Install a browser wallet first\");\n  const wallet = createWalletClient({ chain, transport: custom(provider) });\n  const [account] = await wallet.requestAddresses();\n  if (!account) throw new Error(\"No wallet account selected\");\n  return createWalletClient({ account, chain, transport: custom(provider) });\n}\n\n// Shared props for the three-line React integration.\nexport const checkoutConfig = { chain, deployment, publicClient, walletClient: connectWallet };\n"
   },
   {
     "key": "Checkout.tsx",
     "label": "Checkout.tsx",
     "filename": "Checkout.tsx",
     "language": "tsx",
-    "code": "\"use client\";\n\nimport { KakushiPay } from \"@kakushi/widget\";\nimport { chain, deployment, publicClient, connectWallet } from \"./arc\";\n\n// Pass a registered recipient wallet or their st:eth: stealth meta-address.\nexport function Checkout({ to }: { to: string }) {\n  return <KakushiPay\n    to={to}\n    amount=\"0.01\"\n    chain={chain}\n    deployment={deployment}\n    publicClient={publicClient}\n    walletClient={connectWallet}\n    onPaid={({ txHash }) => console.info(\"Payment confirmed:\", txHash)}\n  />;\n}\n"
+    "code": "\"use client\";\n\nimport { KakushiPay } from \"@kakushi/widget\";\nimport { checkoutConfig } from \"./arc\";\nexport const Checkout = ({ to }: { to: string }) => <KakushiPay to={to} amount=\"0.01\" {...checkoutConfig} />;\n"
   },
   {
     "key": "send.ts",

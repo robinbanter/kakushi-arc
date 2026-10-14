@@ -17,13 +17,15 @@ const serif = IBM_Plex_Serif({ subsets: ["latin"], weight: ["300", "400", "500"]
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:9210"),
-  title: { default: "Kakushi — the privacy layer for Arc", template: "%s · Kakushi" },
-  description: "Drop private USDC payments into any app with Kakushi’s SDK and payment widget on Arc testnet.",
+  title: { default: "Kakushi — the private execution layer for Arc", template: "%s · Kakushi" },
+  description: "Kakushi move unseen. Your payment arrives. Stealth USDC, in-browser ZK proofs and user-controlled disclosure for Arc apps.",
   applicationName: "Kakushi",
-  openGraph: { images: ["/art/og.jpg"] },
+  openGraph: { title: "Kakushi — the private execution layer for Arc", images: [{ url: "/brand/kakushi-logo.png", width: 1254, height: 1254, alt: "Kakushi hooded keyhole mark" }] },
+  twitter: { card: "summary", images: ["/brand/kakushi-logo.png"] },
+  icons: { icon: "/brand/kakushi-logo.png", apple: "/brand/kakushi-logo.png" },
 };
 
-export const viewport: Viewport = { themeColor: "#04060f", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#0B0F1A", colorScheme: "dark" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

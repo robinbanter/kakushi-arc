@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-14T15:44:27.324Z",
+  "chainId": 5042002,
+  "mode": "Live (testnet)",
+  "registrationOrigin": "http://127.0.0.1:9210",
+  "paymentAndReceiveOrigin": "https://kakushi-arc.vercel.app",
+  "walletHarness": "Playwright EIP-1193 bridge; real RPC, signatures and transactions. No extension UX tested.",
+  "funding": {
+    "payer": "0xeeFd7a334B9edfA205293105d35aa5201110B58B",
+    "chainId": 5042002,
+    "hash": "0x619d18507f43d30b7408319a05957d1e62304be9daccdf4a51626b296260f8a8",
+    "fundedUsdc": "0.08",
+    "gasUsdc": "0.000525",
+    "scope": "<=0.5 USDC gross budget; payment only"
+  },
+  "live": {
+    "wallet": "0xeeFd7a334B9edfA205293105d35aa5201110B58B",
+    "recipient": "0x0e050aEC2e5776d2CfEe81eF29bdaaBB3197a288",
+    "transactions": [
+      {
+        "step": "registerKeys",
+        "hash": "0x7026560ee9fefe4748894a978f90d3cf3ec1cb9d1c295409d77c20157425888a",
+        "gasUsdc": "0.0028829",
+        "status": "success"
+      },
+      {
+        "step": "approve",
+        "hash": "0xad913b8a68f3e1d1deee05398d7fcfbc83391ac9092c0c8f415aaee16cee7f0a",
+        "gasUsdc": "0.00138565",
+        "status": "success"
+      },
+      {
+        "step": "sendToken",
+        "hash": "0x764d6b5a551ecbf71f7711e730ebeb62e47ba68d90f790e8d5c027ac0177afe3",
+        "gasUsdc": "0.0024503",
+        "status": "success"
+      },
+      {
+        "step": "move",
+        "hash": "0x04fbd437049a5969b941c373a97fb4e03704bb3b5c3fa195caa0b80099e225e8",
+        "status": "success",
+        "gasUsdc": "0.00122345"
+      }
+    ],
+    "proofAssets": [],
+    "errors": [],
+    "scope": "Live (testnet): register, widget pay, receive, move. New shield/withdraw not run: minimum 1 USDC exceeds gross 0.5 budget."
+  },
+  "cleanup": {
+    "chainId": 5042002,
+    "transactions": [
+      {
+        "address": "0xeeFd7a334B9edfA205293105d35aa5201110B58B",
+        "hash": "0x9edc9da3a83d981912fa8050a556cde2a5019204bd1de08071d92be730e5d7df",
+        "returnedUsdc": "0.07103915",
+        "gasUsdc": "0.000525"
+      }
+    ],
+    "dust": [
+      {
+        "address": "0x952396051DC5F253E8bCBA3a9C8739730Ec161bb",
+        "balanceUsdc": "0.00049355"
+      },
+      {
+        "address": "0x0e050aEC2e5776d2CfEe81eF29bdaaBB3197a288",
+        "balanceUsdc": "0"
+      }
+    ]
+  },
+  "budget": {
+    "grossDeployerOutlay": "0.080525",
+    "returnedUsdc": "0.07103915",
+    "netDeployerCostUsdc": "0.00948585",
+    "totalGasUsdc": "0.0089923"
+  },
+  "newShieldWithdraw": "Not run: 1 USDC minimum deposit exceeds <=0.5 USDC gross cap; clarification requested, no expanded authorization received.",
+  "mainnet": "No transactions signed or broadcast. Hosted guard rejected inherited mainnet configuration before wallet connection; deployment and project config corrected to testnet.",
+  "retry": "Local rehearsal encountered public-RPC throttling. Read-only gas/nonce retries added to automation; no explicit submission retries. Hosted payment and receive completed."
+}

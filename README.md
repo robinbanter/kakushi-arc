@@ -1,10 +1,35 @@
 # Kakushi on Arc
 
-**The privacy layer for Arc: drop private USDC payments into any app.** Integrate the source SDK with your own interface or embed `<KakushiPay>` beside your checkout. The widget resolves a recipient, approves USDC, pays a fresh stealth address and returns a confirmed receipt. Shielded pools and a gasless withdrawal relayer are separate building blocks when you need to break the deposit-to-withdrawal link.
+**The private execution layer for Arc.** Kakushi move unseen. Your payment arrives.
+
+Composable payment privacy for existing Arc apps: stealth USDC payments, in-browser Noir/UltraHonk proofs and user-controlled disclosure. Kakushi is **not a rollup**, uses **no TEE**, and does not provide arbitrary confidential program execution. Its ZK verification does not require trusting a hardware vendor.
+
+- **Go hidden:** shield a fixed 1, 10 or 100 USDC note, or register a stealth meta-address.
+- **Move unseen:** pay a fresh stealth address; separately, prove a shielded withdrawal in your browser.
+- **Surface on Arc:** the relayer withdraws to a fresh address, paying gas and taking its quoted USDC fee from the note. Settlement is a normal Arc transaction.
+
+These are composable primitives, not one automatic pipeline: `<KakushiPay>` sends a stealth payment and does not spend a shielded note.
+
+**Privacy approaches:** [MagicBlock PER on Solana](https://github.com/magicblock-labs/starter-kits/tree/main/private-payments-demo) uses a TEE. Kakushi on Arc uses ZK (Noir/UltraHonk), native USDC and a withdrawal relayer. The comparison is about privacy mechanisms, not feature parity.
+
+**Disclosure:** the SDK's `scanAnnouncements` accepts `viewingKey` and `spendingPublicKey` without `spendingKey`; an auditor can identify incoming stealth payments without spending authority. This exposes all discoverable payments for that key, including future receipts while it remains in use. It is not per-payment selective disclosure, a shielded-note viewing key or a compliance certification. Auditor export UI is next. See [implementation](packages/sdk/src/stealth.ts) and [view-only test](packages/sdk/test/stealth.test.ts).
+
+**Build with it:** private payroll/payout destinations, checkout, and game winnings. Sealed-bid style applications can use the payout primitives, but bid secrecy and commit/reveal auction logic are not shipped.
 
 **Live (testnet):** stealth registration, payment, receive scan, shielding and browser-proved relayer withdrawal. **Fork:** local rehearsals are separate evidence. **Not run in this round:** mainnet transactions. Existing mainnet evidence is [recorded separately](docs/MAINNET-DEPLOYMENT.md). Stealth hides the recipient link; the sender and amount stay public. Independent pool deposits matter for privacy.
 
-## Integrate in three steps
+## Integrate in three lines
+
+After installing the workspace and configuring [arc.ts](packages/app/src/examples/arc.ts), add this in a client component:
+
+```tsx
+import { KakushiPay } from "@kakushi/widget";
+import { checkoutConfig } from "./arc";
+export const Checkout = ({ to }: { to: string }) => <KakushiPay to={to} amount="0.01" {...checkoutConfig} />;
+```
+
+The complete client module is typechecked in [Checkout.tsx](packages/app/src/examples/Checkout.tsx). Setup still matters:
+
 
 1. Clone this repository and run `pnpm install`. `@kakushi/sdk` and `@kakushi/widget` are workspace source packages, **not published npm packages**.
 2. Copy the typechecked [Arc client setup](packages/app/src/examples/arc.ts) alongside [Checkout.tsx](packages/app/src/examples/Checkout.tsx), then render `<Checkout to={recipient} />`. It embeds `<KakushiPay to={to} amount="0.01" ... />` with real clients and testnet addresses. The recipient registers on Receive or supplies a stealth meta-address.
@@ -32,7 +57,7 @@ Deployed on **Arc testnet** (chain 5042002, deploy block 67017441) and exercised
 | ShieldedWithdrawVerifier (UltraHonk) | [`0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120`](https://explorer.testnet.arc.io/address/0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120) |
 | KakushiPool USDC-1 / USDC-10 / USDC-100 | [`0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4`](https://explorer.testnet.arc.io/address/0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4) / [`0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c`](https://explorer.testnet.arc.io/address/0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c) / [`0x90bbBC5A461819620F5929eDa05e36814a7DB913`](https://explorer.testnet.arc.io/address/0x90bbBC5A461819620F5929eDa05e36814a7DB913) |
 
-Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the generated Solidity verifier), 14 Noir circuit tests (prior verified run; current sandbox blocks Nargo’s home-directory cache lock), 65 TypeScript tests (SDK, prover, relayer, widget, config, app copy guard). The Foundry tests run Circle's FiatToken v2.2 bytecode etched at `0x3600…0000` with the same `USDC`/`2` EIP-712 domain, 6 decimals, blocklist and pause behavior as Arc's USDC.
+Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the generated Solidity verifier), 14 Noir circuit tests (round 2 verified run), 65 TypeScript tests (SDK, prover, relayer, widget, config, app copy guard). The Foundry tests run Circle's FiatToken v2.2 bytecode etched at `0x3600…0000` with the same `USDC`/`2` EIP-712 domain, 6 decimals, blocklist and pause behavior as Arc's USDC.
 
 ## Arc stack
 

@@ -1,5 +1,5 @@
 "use client";
-import { Logo } from "@kakushi/ui";
+import { Brand } from "@/components/brand";
 import Link from "next/link";
 import { Shell } from "./section";
 
@@ -8,8 +8,8 @@ export function Footer() {
     <footer className="border-t border-ui-hairline py-12">
       <Shell className="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(2,minmax(0,0.6fr))]">
         <div className="grid content-start gap-4">
-          <Logo height={30} />
-          <p className="max-w-[40ch] text-[14px] leading-relaxed text-ui-muted">Private USDC payments on Circle&rsquo;s Arc: ERC-5564 stealth addresses, a Noir/UltraHonk shielded pool and a relayer paid in USDC. Beta software, not audited.</p>
+          <Brand />
+          <p className="max-w-[40ch] text-[14px] leading-relaxed text-ui-muted">The private execution layer for Arc. Payment primitives: ERC-5564 stealth addresses, a Noir/UltraHonk shielded pool and a relayer paid in USDC. Beta software, not audited.</p>
         </div>
         <nav aria-label="Product" className="grid content-start gap-2 text-[15px]">
           <p className="mb-1 text-[13px] font-medium text-ui-muted uppercase">App</p>

@@ -18,3 +18,6 @@ export async function connectWallet() {
   if (!account) throw new Error("No wallet account selected");
   return createWalletClient({ account, chain, transport: custom(provider) });
 }
+
+// Shared props for the three-line React integration.
+export const checkoutConfig = { chain, deployment, publicClient, walletClient: connectWallet };

@@ -1,0 +1,140 @@
+{
+  "base": "https://kakushi-arc.vercel.app",
+  "at": "2026-10-14T15:43:55.627Z",
+  "routes": [
+    {
+      "route": "/",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/send",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/receive",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/shield",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/developers",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/send",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/receive",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/shield",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    },
+    {
+      "route": "/developers",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "brokenImages": [],
+      "isolated": true
+    }
+  ],
+  "navigation": [
+    {
+      "width": 1440,
+      "name": "Pay",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "name": "Receive",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "name": "Shield",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "name": "Developers",
+      "ok": true
+    },
+    {
+      "width": 390,
+      "name": "Pay",
+      "ok": true
+    },
+    {
+      "width": 390,
+      "name": "Receive",
+      "ok": true
+    },
+    {
+      "width": 390,
+      "name": "Shield",
+      "ok": true
+    },
+    {
+      "width": 390,
+      "name": "Developers",
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "developerTabs": [
+    "arc.ts",
+    "Checkout.tsx",
+    "send.ts"
+  ],
+  "walletControls": {
+    "mode": "read-only public account fixture; no signing",
+    "accountsChanged": true,
+    "disconnect": true
+  },
+  "status": "passed"
+}

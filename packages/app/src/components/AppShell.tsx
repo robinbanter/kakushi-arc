@@ -1,10 +1,11 @@
 "use client";
 
-import { AppFrame, cn, KakushiMark, Logo, Menu, TopNav } from "@kakushi/ui";
+import { AppFrame, cn, KakushiMark, Menu, TopNav } from "@kakushi/ui";
 import { CodeXml, Inbox, LogOut, Send, Shield, Wallet } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
+import { Brand } from "@/components/brand";
 import { useRuntime } from "@/lib/runtime";
 import { useWallet } from "@/lib/wallet";
 
@@ -39,15 +40,8 @@ export function NetworkPill({ className, compact = false }: { className?: string
   );
 }
 
-/** The app's sky: navy, a blue bloom and a faint star field. */
 function Backdrop() {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#04060f]">
-      <div className="absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_-5%,rgb(47_71_245/0.30),transparent_70%)]" />
-      <div className="app-stars absolute inset-0 opacity-70" />
-      <div className="absolute inset-x-0 bottom-0 h-[45%] bg-[radial-gradient(60%_80%_at_50%_100%,rgb(47_71_245/0.22),transparent_70%)]" />
-    </div>
-  );
+  return <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-ui-canvas" />;
 }
 
 export function ConnectButton({ block = false, large = false }: { block?: boolean; large?: boolean }) {
@@ -92,7 +86,7 @@ export function ConnectButton({ block = false, large = false }: { block?: boolea
 export function AppHeader() {
   const pathname = usePathname() ?? "/";
   return <TopNav
-    brand={<Logo height={30} />} brandHref="/" brandLabel="Kakushi, home"
+    brand={<Brand />} brandHref="/" brandLabel="Kakushi, home"
     items={NAV} value={activeKey(pathname)} linkAs={Link} contained
     actions={<ConnectButton />} compactActions={<ConnectButton />}
     sheetTitle="Kakushi" />;

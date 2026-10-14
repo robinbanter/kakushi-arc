@@ -35,7 +35,7 @@ export function WidgetDemo() {
       {!w.address && <div className="mb-4"><ConnectButton block /></div>}
       <KakushiPay to={to} amount="0.01" chain={arcChain(cfg.network, cfg.publicRpc)}
         walletClient={w.address ? () => w.walletClient() : null} publicClient={client} deployment={deployment}
-        label="Pay 0.01 USDC privately" theme={{ width: "100%" }} />
+        label="Pay 0.01 USDC privately" theme={{ width: "100%", accent: "#7C6CFF", accentHover: "#9588FF", text: "#0B0F1A", background: "#1B2440", muted: "#b2b8cf" }} />
       <p className="mt-3 text-xs leading-relaxed text-ui-muted">Real {cfg.chainName} transaction. Payer also pays USDC gas. Sender and amount stay public; this widget uses stealth addresses, not the shielded pool.</p>
     </div>
   </div>;

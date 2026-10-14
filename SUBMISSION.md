@@ -1,10 +1,14 @@
-# Kakushi — the privacy layer for Arc
+# Kakushi — the private execution layer for Arc
 
 ## Description
 
-Drop private USDC payments into any app. Kakushi gives Arc developers a source SDK and `<KakushiPay>` React widget: resolve a recipient, approve USDC and send to a fresh ERC-5564 stealth address. Recipients register through ERC-6538 and scan their payments. For unlinking deposits and withdrawals, fixed-size USDC pools use Noir/UltraHonk proofs generated in the browser. A relayer submits withdrawals and takes its quoted USDC fee from the note, so the recipient needs no gas.
+Kakushi move unseen. Your payment arrives. The private execution layer for Arc gives existing apps composable USDC payment privacy: a source SDK and three-line KakushiPay integration after client setup.
 
-Live on Arc testnet: registration, widget payment, receive scan, shield and browser-proved relayer withdrawal. The landing page lets you try a real 0.01 USDC payment; Developers contains typechecked examples and contract links. Source packages are not on npm yet. Small anonymity sets, one relayer and unaudited software remain explicit limits. Sender and amount stay public; hidden amounts through FHE are next, not shipped. The hosted demo uses testnet; existing mainnet deployment evidence is recorded separately.
+Go hidden: shield USDC or register a stealth meta-address. Move unseen: send stealth payments and generate Noir/UltraHonk withdrawal proofs in-browser. Surface on Arc: a relayer pays withdrawal gas; settlement is a normal Arc transaction. Stealth checkout and shielded withdrawals are separate primitives.
+
+Kakushi is not a rollup and has no TEE or hardware vendor trust. Viewing-only SDK scans let users disclose incoming stealth payments without spending authority; auditor export UI is next. Build payroll, checkout and game payouts; sealed-bid logic remains app work.
+
+Live on testnet. Sender and amounts remain public. Small anonymity sets, one relayer and unaudited software are explicit limits. FHE is next; source packages are not on npm.
 
 ## What it uses Arc for
 

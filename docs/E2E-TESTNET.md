@@ -146,3 +146,25 @@ Hosted proof: **5.3 seconds**, full withdrawal **24.894 seconds** including chai
 Budget: **0.250525 USDC** new deployer outlay including funding gas; reused **0.86 USDC** of the previous test recipient’s principal. All run transactions (funding, browser and cleanup) consumed **0.121517875 USDC** gas. Swept **0.950820925 USDC** back to the deployer; payer, recipient and prior recipient are zero. One stealth address retains **0.00049355 USDC**, below the **0.000525 USDC** transfer gas. Relayer keeps its earned fee. All sweep and funding explorer hashes: [ROUND2-TESTNET.json](ROUND2-TESTNET.json).
 
 10 route/viewport checks, 8 header navigation clicks, home links, hero anchor, code tabs, invalid-note and missing-wallet errors passed. Exact copied snippets match the files compiled by typecheck. Screens: [screens/testnet](screens/testnet/), prefixed `round2-`. No mock features or sample payment responses were introduced. 10/100 USDC deposits and self-paid withdrawals were **Not run** in this budget.
+
+
+## Private execution layer rebrand — 2026-10-14
+
+**Live (testnet)**: fresh-wallet registration → real homepage widget pays 0.01 USDC → Receive finds the payment → Move returns it to the payer. Registration ran on the local production build; payment/receive/move ran on the rebranded [Vercel site](https://kakushi-arc.vercel.app). Playwright used an EIP-1193 wallet bridge with signing in Node and real public RPC transactions. No extension wallet UX was tested.
+
+**Not run in this pass:** new shield/withdraw transactions. The smallest deployed pool requires 1 USDC, exceeding the task's ≤0.5 USDC gross cap. Clarification permitting a temporary 1 USDC deposit was requested and not assumed. The preceding round's full browser-proof/relayer receipts remain historical evidence, not a new rebrand verification.
+
+| Action | Receipt |
+| --- | --- |
+| Fund fresh payer, 0.08 USDC | [0x619d1850…](https://explorer.testnet.arc.io/tx/0x619d18507f43d30b7408319a05957d1e62304be9daccdf4a51626b296260f8a8) |
+| Register | [0x7026560e…](https://explorer.testnet.arc.io/tx/0x7026560ee9fefe4748894a978f90d3cf3ec1cb9d1c295409d77c20157425888a) |
+| Approve exact payment | [0xad913b8a…](https://explorer.testnet.arc.io/tx/0xad913b8a68f3e1d1deee05398d7fcfbc83391ac9092c0c8f415aaee16cee7f0a) |
+| Widget payment, 0.01 USDC | [0x764d6b5a…](https://explorer.testnet.arc.io/tx/0x764d6b5a551ecbf71f7711e730ebeb62e47ba68d90f790e8d5c027ac0177afe3) |
+| Receive → Move | [0x04fbd437…](https://explorer.testnet.arc.io/tx/0x04fbd437049a5969b941c373a97fb4e03704bb3b5c3fa195caa0b80099e225e8) |
+| Recover remaining payer USDC | [0x9edc9da3…](https://explorer.testnet.arc.io/tx/0x9edc9da3a83d981912fa8050a556cde2a5019204bd1de08071d92be730e5d7df) |
+
+Gross deployer outlay **0.080525 USDC**; returned **0.07103915 USDC**; net cost **0.00948585 USDC**. Total transaction gas **0.0089923 USDC**. Payer and unused withdrawal recipient ended at zero; stealth dust **0.00049355 USDC** is below the 0.000525 transfer fee. [Complete receipts and budget](REBRAND-TESTNET.json).
+
+The local wallet rehearsal encountered public-RPC throttling; bounded retries were added to read-only gas/nonce checks in the harness. No explicit submission retry was added. A hosted preflight also caught inherited mainnet config before wallet connection; both the deployment and project network/RPC settings were corrected to testnet. No mainnet transaction was signed or broadcast. Both app config and proxied RPC chain ID are now asserted by the rebrand harness.
+
+`node scripts/e2e-browser-rebrand.mjs` passes against the hosted site: five routes at 1440/390, eight header clicks, hero anchor, favicon, source-exact copied examples, disconnect/account-change controls, invalid-note/missing-wallet errors and 404. No console errors, broken images or overflow. Screenshots: `screens/testnet/rebrand-*`. Typecheck, lint, local/Vercel builds, 65 TypeScript tests, 30 Arc Foundry tests and 14 Noir tests pass. [Rerun commands and limits](REBRAND-REPORT.md).
