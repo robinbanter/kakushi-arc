@@ -67,8 +67,8 @@ function tokenize(code: string): Token[] {
 const COLORS: Record<Token["kind"], string | undefined> = {
   plain: undefined,
   keyword: "text-[#c7a6ff]",
-  string: "text-ui-lime",
-  comment: "text-[#6f727b] italic",
+  string: "text-ui-lime-text",
+  comment: "text-ui-muted italic",
   number: "text-ui-honey",
   fn: "text-ui-sky",
   tag: "text-ui-salmon",

@@ -22,7 +22,7 @@ export function ScreenTitle({ title, pill }: { title: string; pill: ReactNode })
   );
 }
 
-export const inputCls = "w-full min-w-0 rounded-[16px] bg-transparent text-[15px] outline-none placeholder:text-ui-dim";
+export const inputCls = "w-full min-w-0 rounded-[16px] bg-transparent text-[15px] outline-none placeholder:text-ui-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ui-focus";
 
 /** The single result headline after an action, details collapsed. */
 export function Done({ headline, sub, details }: { headline: ReactNode; sub?: ReactNode; details?: ReactNode }) {
