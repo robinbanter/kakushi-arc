@@ -10,7 +10,7 @@ Go hidden: shield USDC or register a stealth meta-address. Move unseen: send ste
 
 Kakushi is not a rollup and has no TEE or hardware vendor trust. Viewing-only SDK scans let users disclose incoming stealth payments without spending authority; auditor export UI is next. Build payroll, checkout and game payouts; sealed-bid logic remains app work.
 
-Live on testnet. Sender and amounts remain public. Small anonymity sets, one relayer and unaudited software are explicit limits. FHE is next; source packages are not on npm.
+Deployed on Arc mainnet; earlier end-to-end verification ran on testnet. Sender and amounts remain public. Small anonymity sets, one relayer and unaudited software are explicit limits. FHE is next; source packages are not on npm.
 
 ## What it uses Arc for
 

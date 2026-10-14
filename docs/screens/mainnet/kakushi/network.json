@@ -1,0 +1,40 @@
+{
+  "network": "mainnet",
+  "chainId": 5042,
+  "chainName": "Arc",
+  "explorer": "https://explorer.arc.io",
+  "usdc": "0x3600000000000000000000000000000000000000",
+  "deployment": {
+    "network": "mainnet",
+    "chainId": 5042,
+    "deployer": "0x0648aDF1967692A0c991d7715b0b588452321FBd",
+    "deployBlock": 25937612,
+    "usdc": "0x3600000000000000000000000000000000000000",
+    "stealthRegistry": "0x8Dde7Ef3c21F61DC3956CD563b71D44D14D5f524",
+    "stealthAnnouncer": "0x6d5CeEe9966203Ca33eD94Db75D388e217F91caa",
+    "stealthPay": "0xD8236B9BD4D141a3868B52a3Da01bA8e0074c2f1",
+    "shieldedVerifier": "0x40c4dAEDd743AE54c4aEe432636562Cc13e191a1",
+    "pools": {
+      "USDC-1": {
+        "address": "0x452827fC2f27624d23196E072e544728f26b555C",
+        "denomination": "1000000",
+        "maxDeposits": 5000,
+        "decimals": 6
+      },
+      "USDC-10": {
+        "address": "0xA10D52219aD3B7Faa42B19a3AB24f90451A92182",
+        "denomination": "10000000",
+        "maxDeposits": 2000,
+        "decimals": 6
+      },
+      "USDC-100": {
+        "address": "0xBF022d69eb2E191f68427290F63b7D258f8478B1",
+        "denomination": "100000000",
+        "maxDeposits": 1000,
+        "decimals": 6
+      }
+    }
+  },
+  "relayer": true,
+  "publicRpc": "https://rpc.mainnet.arc.io"
+}

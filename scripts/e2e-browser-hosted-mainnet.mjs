@@ -1,6 +1,6 @@
 /** Read-only production sweep. No wallets, signatures, POST APIs or transactions. */
 import {createRequire} from 'node:module';
-import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {readFileSync,mkdirSync,writeFileSync,existsSync,unlinkSync} from 'node:fs';
 import path from 'node:path';
 const require=createRequire(import.meta.url);
 let chromium;try{({chromium}=require('playwright'));}catch{({chromium}=createRequire(process.env.PLAYWRIGHT_PACKAGE||path.resolve('../thenar-arc/package.json'))('playwright'));}
@@ -9,7 +9,7 @@ const tmp=path.resolve('.vercel/browser-mainnet-tmp');mkdirSync(tmp,{recursive:t
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',args:['--enable-webgl','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 let failed=false;
 const rpc=async(method,params)=>{const r=await fetch('https://rpc.mainnet.arc.io',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params}),signal:AbortSignal.timeout(45000)});const j=await r.json();if(j.error)throw Error(j.error.message);return j.result;};
-try{for(const config of configurations){
+try{for(const config of configurations.filter(c=>!process.env.MAINNET_SURFACES||process.env.MAINNET_SURFACES.split(",").includes(c.name))){
  const out=`docs/screens/mainnet/${config.name}`;mkdirSync(out,{recursive:true});const results=[];
  const context=await browser.newContext({viewport:{width:1440,height:900}});const page=await context.newPage();const errors=[];const consoleErrors=[];page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text())});
  page.on('pageerror',e=>errors.push(e.message));
@@ -27,6 +27,7 @@ try{for(const config of configurations){
     const row={route,status:response?.status(),bodyPresent:body.trim().length>30,testnetWording:wording,wrongExplorerLinks:wrongLinks,pageErrors:errors.slice(start)};
     row.ok=row.status===200&&row.bodyPresent&&!wording.length&&!wrongLinks.length&&!row.pageErrors.length;
     results.push(row);console.log(`${row.ok?'PASS':'FAIL'} ${config.name} ${route} HTTP ${row.status} wording=${wording.length} errors=${row.pageErrors.length}`);
+    const staleBody=`${out}/${route.replace(/[^a-z0-9]/gi,'-')||'home'}.txt`;if(row.ok&&existsSync(staleBody))unlinkSync(staleBody);
     if(!row.ok)writeFileSync(`${out}/${route.replace(/[^a-z0-9]/gi,'-')||'home'}.txt`,body);
     await page.screenshot({path:`${out}/${route.replace(/[^a-z0-9]/gi,'-')||'home'}.jpg`,type:'jpeg',quality:65,fullPage:false});
    }catch(e){results.push({route,ok:false,error:String(e)});console.log('FAIL',config.name,route,String(e));}

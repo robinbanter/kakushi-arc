@@ -16,3 +16,7 @@ Service credentials were supplied to Vercel via stdin from the ignored `.deploye
 The previous production artifacts were retained at `https://kakushi-arc-testnet.vercel.app` (Vercel aliases, no extra build). These are frozen historical builds, not a freshly verified preview environment; shared backend URLs may now resolve to mainnet. Do not use them for transaction rehearsals without checking the displayed chain.
 
 This migration performs reads only: no wallet connection, signature, deposit, payment, withdrawal or chain broadcast. Mainnet contract/deployment transaction evidence is recorded separately in the repository. Local executors remain an on-demand demo requirement, not an always-on hosting service provisioned here.
+
+Production environment: KAKUSHI_NETWORK=NEXT_PUBLIC_KAKUSHI_NETWORK=mainnet; ARC_RPC_URL=https://rpc.mainnet.arc.io; RELAYER_KEY from mainnet roles.
+
+Verified: 5 routes returned HTTP 200 with no rendered testnet wording, wrong Arc explorer link or uncaught page exception. Network APIs and RPC reported chain 5042; expected mainnet contract bytecode was present. Screenshots and machine-readable results are saved beside this report.
