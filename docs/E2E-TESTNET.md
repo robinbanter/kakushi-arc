@@ -78,3 +78,34 @@ The app (`pnpm --filter @kakushi/app start`, port 9210) was pointed at the live 
 - **Withdraw with in-browser proving** (`/shield` → Withdraw, no wallet connected): the note kept in step 2 (note B) was pasted with a fresh recipient. The page rebuilt the Merkle tree from the public RPC, **proved in a web worker (noir_js witness + bb.js UltraHonk) in 12.0 s**, sent the proof to the relayer and showed "Withdrawn, gasless". Whole click-to-done time 15.2 s. Tx [`0x98956466…5ecf`](https://explorer.testnet.arc.io/tx/0x98956466909e827762a948373c1fa0049d03fdbec2838240969e123561c35ecf): sent by the relayer, 3,642,426 gas; recipient `0xb3070fD7485258d5B3F56e0a0E299e38b38Ed22A` holds 0.865625 USDC with nonce 0 (it never sent a transaction); the relayer received the 0.134375 USDC fee.
 
 Screenshots of every route at 1440 and 390 px, and of these flows, are in `docs/screens/testnet/`.
+
+## 8. Plug-and-play browser rehearsal — 2026-10-14 (Live, testnet)
+
+Fresh evidence for the new landing widget and shared four-item header. Connected Chrome was controlled through Playwright via the browser tool. Shell-launched Chromium was blocked by the sandbox. The local EIP-1193 adapter (`scripts/browser-wallet.mjs`) signs only with the existing test account in Node; a loopback proxy substitutes the wallet provider reference to avoid the user’s installed wallet. No mocked RPC, contracts, balances, proof or relayer responses. This is not a MetaMask extension test.
+
+1. Registered Alice’s stealth meta-address from Receive.
+2. Paid **0.01 USDC through the actual landing KakushiPay widget**, including approval.
+3. Receive found the new announcement at block 67135449 and showed 0.01 USDC.
+4. Saved the browser-generated note and deposited **1 USDC** through Shield.
+5. Disconnected the wallet. The browser rebuilt the Merkle tree, generated an UltraHonk proof in **6.4 seconds**, and submitted it through the real relayer.
+
+| Browser action | Live transaction | Gas (USDC) |
+| --- | --- | --- |
+| registerKeys | [0xacc16a0063d3da744b30763c77d16a376a742a5c278ba237044074697e74ee27](https://explorer.testnet.arc.io/tx/0xacc16a0063d3da744b30763c77d16a376a742a5c278ba237044074697e74ee27) | 0.0028826 |
+| approve | [0x7008c77d4f548c562734bdbd27115defa5c69226bcbac9c142a295a37bbcfdc3](https://explorer.testnet.arc.io/tx/0x7008c77d4f548c562734bdbd27115defa5c69226bcbac9c142a295a37bbcfdc3) | 0.00138565 |
+| sendToken | [0xc878c7c04d66bd9aae1a9e3e96e277b0427d6ab00fe0a805e798977cdc841f0d](https://explorer.testnet.arc.io/tx/0xc878c7c04d66bd9aae1a9e3e96e277b0427d6ab00fe0a805e798977cdc841f0d) | 0.002452 |
+| approve | [0xc69e83010db53e954afbf5b7c4a61752344adf189f626aa89d506e723d304a43](https://explorer.testnet.arc.io/tx/0xc69e83010db53e954afbf5b7c4a61752344adf189f626aa89d506e723d304a43) | 0.00138595 |
+| deposit | [0x76fd23ab99cf12e21fc5882f770dff5869a36a1d5fe94a974282707fbe966a3e](https://explorer.testnet.arc.io/tx/0x76fd23ab99cf12e21fc5882f770dff5869a36a1d5fe94a974282707fbe966a3e) | 0.0142189 |
+| withdraw (browser proof, relayer) | [0x98b739e9136414e0968ab25f67a563ce27306ed7f8004b697f9a1f182e21e80e](https://explorer.testnet.arc.io/tx/0x98b739e9136414e0968ab25f67a563ce27306ed7f8004b697f9a1f182e21e80e) | 0.09105825 |
+
+Recipient [`0xCDcaF8826074385AAD52436D9CDEcd59a26D4363`](https://explorer.testnet.arc.io/address/0xCDcaF8826074385AAD52436D9CDEcd59a26D4363) had **0 USDC immediately before withdrawal**, received **0.865625 USDC**, and has **nonce 0**. Relayer fee: **0.134375 USDC**. Receipt status: success.
+
+Budget: one deployer top-up of **0.98 USDC**, funding gas **0.00122375 USDC**, total new deployer outlay **0.98122375 USDC** ([funding transaction](https://explorer.testnet.arc.io/tx/0x28e72af8fc4dd0697bf682b8833b3f3f0cf3c12c766142619297084d119bae65)). Reused 0.061875675 USDC already in Alice and existing relayer funds; the 1 USDC pool principal was withdrawn. Gas across funding, registration, approvals, payment, deposit and withdrawal: **0.11460710 USDC**. No mainnet broadcasts.
+
+**Bug fixed during the live run:** the public RPC rejected batches of six `eth_getLogs` calls with `-32005 rate limit exceeded`. Receive scans and withdrawal tree reconstruction now use sequential pages plus bounded exponential backoff for throttled reads. Registration/unlock failures are surfaced to the user. Three retry regression tests pass. An empty note no longer incorrectly claims the relayer fee is too high.
+
+**Screens:** all five routes at 1440×1000 and 390×1000, no horizontal overflow; the mobile menu opened and navigated to Pay. Connected wallet, receive result and completed withdrawal also fit 390 px. Current captures are `.jpg` files under `docs/screens/testnet/`; the old PNG set was replaced. Proof receipt captures hide the spent note and were taken before the final empty-note explanatory copy correction.
+
+**Checks:** workspace typecheck PASS; 65 TypeScript tests PASS; Arc Foundry 30 tests PASS (real proofs); production build PASS; design detector no findings. `pnpm zk:test` was attempted but Nargo cannot lock `~/nargo/.package-cache` inside this session’s filesystem sandbox. The historical 14 Noir tests were not rerun successfully here; no circuit/verifier code changed.
+
+Raw receipts, balance checks, viewport results and test status: [`BROWSER-TESTNET.json`](BROWSER-TESTNET.json). All local servers started for this run were stopped. Source SDK/widget packages remain unpublished; anonymity sets remain test-sized; the relayer is a single operator; unaudited; FHE is next.

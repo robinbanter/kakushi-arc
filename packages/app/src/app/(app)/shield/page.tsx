@@ -192,7 +192,7 @@ function Withdraw({ pools }: { pools: PoolInfo[] }) {
           </label>
         ) : (
           <p className="mt-3 text-[13px] text-ui-muted">
-            {cfg?.relayer ? "Gasless isn't available for this pool right now (the relayer's fee would be too large a share of the note)." : "No relayer is configured for this deployment."} You&rsquo;ll withdraw from your connected wallet and pay its USDC gas; the recipient receives the full amount.
+            {!pool ? "Paste a valid note to see available withdrawal methods." : <>{cfg?.relayer ? "The relayer is unavailable or has not quoted this pool. Try again shortly." : "No relayer is configured for this deployment."} You can withdraw from your connected wallet and pay its USDC gas; the recipient receives the full amount.</>}
           </p>
         )}
       </Well>

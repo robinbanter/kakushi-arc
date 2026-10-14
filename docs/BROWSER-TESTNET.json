@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-14T09:06:38.171Z",
+  "chainId": 5042002,
+  "wallet": "0x592b6c6Ec103D404229E1f432544883cb84C56df",
+  "transactions": [
+    {
+      "step": "registerKeys",
+      "hash": "0xacc16a0063d3da744b30763c77d16a376a742a5c278ba237044074697e74ee27",
+      "status": "success",
+      "gasUsdc": "0.0028826"
+    },
+    {
+      "step": "approve",
+      "hash": "0x7008c77d4f548c562734bdbd27115defa5c69226bcbac9c142a295a37bbcfdc3",
+      "status": "success",
+      "gasUsdc": "0.00138565"
+    },
+    {
+      "step": "sendToken",
+      "hash": "0xc878c7c04d66bd9aae1a9e3e96e277b0427d6ab00fe0a805e798977cdc841f0d",
+      "status": "success",
+      "gasUsdc": "0.002452"
+    },
+    {
+      "step": "approve",
+      "hash": "0xc69e83010db53e954afbf5b7c4a61752344adf189f626aa89d506e723d304a43",
+      "status": "success",
+      "gasUsdc": "0.00138595"
+    },
+    {
+      "step": "deposit",
+      "hash": "0x76fd23ab99cf12e21fc5882f770dff5869a36a1d5fe94a974282707fbe966a3e",
+      "status": "success",
+      "gasUsdc": "0.0142189"
+    },
+    {
+      "step": "withdraw (browser proof, relayer)",
+      "hash": "0x98b739e9136414e0968ab25f67a563ce27306ed7f8004b697f9a1f182e21e80e",
+      "status": "success",
+      "gasUsdc": "0.09105825",
+      "sender": "0xaf4cd54d331deb3418046772346acc86c90a6b16"
+    }
+  ],
+  "screens": [
+    {
+      "width": 1440,
+      "path": "/",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "/send",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "/receive",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "/shield",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "/developers",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "/send",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "/receive",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "/shield",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "/developers",
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "recipient": {
+    "address": "0xCDcaF8826074385AAD52436D9CDEcd59a26D4363",
+    "balanceBeforeUsdc": "0",
+    "balanceAfterUsdc": "0.865625",
+    "nonce": 0
+  },
+  "proofSeconds": 6.4,
+  "relayerFeeUsdc": "0.134375",
+  "funding": {
+    "hash": "0x28e72af8fc4dd0697bf682b8833b3f3f0cf3c12c766142619297084d119bae65",
+    "status": "success",
+    "amountUsdc": "0.98",
+    "gasUsdc": "0.00122375"
+  },
+  "totalGasUsdc": "0.11460710",
+  "newDeployerOutlayUsdc": "0.98122375",
+  "budget": "Reused existing funded test accounts. New deployer funding plus gas <1 USDC. Recycled 1 USDC pool principal; gas across all transactions <1 USDC.",
+  "mobileMenu": true,
+  "walletAdapter": "Local Node EIP-1193 test wallet on port 9212; proxy rewrites window.ethereum to window.kakushiTestWallet only for test isolation. No keys enter browser; RPC, contracts, notes, proof worker and relayer are real.",
+  "browser": "Connected Chrome controlled through Playwright via the browser tool; shell-launched Chromium blocked by sandbox Mach-port permissions.",
+  "scan": "Found the fresh 0.01 USDC payment at 0xF68d\u202676E2, block 67135449; sequential log pages and bounded throttling retries.",
+  "checks": {
+    "typecheck": "PASS (all workspace packages, including example source)",
+    "typescript": "65 passed",
+    "foundry": "30 passed, including real Noir/UltraHonk verifier tests",
+    "nargo": "NOT RUN to completion: home-directory cache lock denied by filesystem sandbox; prior run 14 passed",
+    "build": "PASS",
+    "layout": "10 route/viewport combinations, no horizontal overflow",
+    "browserConsole": "No errors in the final proof tab"
+  }
+}

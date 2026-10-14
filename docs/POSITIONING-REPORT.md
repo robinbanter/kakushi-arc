@@ -1,0 +1,18 @@
+# Kakushi positioning pass — 2026-10-14
+- Pitch: the privacy layer for Arc; SDK + KakushiPay, stealth, shielding, relayer.
+- One shared header: logo, Pay / Receive / Shield / Developers, wallet.
+- Landing: real 0.01 USDC widget, three-step integration, precise privacy limits.
+- Developers: typechecked source snippets, workspace installation, eight explorer-linked contracts.
+- Removed filler, old samples and stale screenshots; README/SUBMISSION/walkthrough updated.
+- Fixed public RPC throttling in receive scans and pool reconstruction; wallet errors now visible.
+- Live browser: register → widget pay → receive scan → 1 USDC shield → relayer withdraw.
+- In-browser proof: 6.4 s; fresh recipient received 0.865625 USDC, nonce 0.
+- New deployer outlay: 0.98122375 USDC; total gas: 0.11460710 USDC; existing funds reused.
+- No mainnet broadcasts; no fork started; all local test services stopped.
+- PASS: workspace typecheck, 65 TS tests, 30 Foundry tests, production build.
+- Nargo: blocked by denied home-cache lock; prior 14 tests not rerun successfully here.
+- PASS: 1440/390 on all five routes, no overflow; mobile menu and connected wallet.
+- Test wallet: Node EIP-1193 bridge; real testnet contracts/RPC/proof/relayer, not MetaMask UI.
+- Code commits: 4f890de (positioning), 71c65b7 (RPC reliability); final evidence commit follows.
+- Evidence: docs/E2E-TESTNET.md §8, docs/BROWSER-TESTNET.json, docs/screens/testnet/*.jpg.
+- Still weak: unpublished packages, small anonymity sets, one relayer, unaudited, FHE unshipped.
