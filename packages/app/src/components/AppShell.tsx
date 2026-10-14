@@ -1,6 +1,6 @@
 "use client";
 
-import { AppFrame, cn, KakushiMark, Logo, Menu, SecondaryButton, TopNav } from "@kakushi/ui";
+import { AppFrame, cn, KakushiMark, Logo, Menu, TopNav } from "@kakushi/ui";
 import { CodeXml, Inbox, LogOut, Send, Shield, Wallet } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,14 +9,14 @@ import { useRuntime } from "@/lib/runtime";
 import { useWallet } from "@/lib/wallet";
 
 export const NAV = [
-  { key: "send", label: "Send", href: "/send", icon: <Send /> },
+  { key: "send", label: "Pay", href: "/send", icon: <Send /> },
   { key: "receive", label: "Receive", href: "/receive", icon: <Inbox /> },
   { key: "shield", label: "Shield", href: "/shield", icon: <Shield /> },
-  { key: "developers", label: "Plugin", href: "/developers", icon: <CodeXml /> },
+  { key: "developers", label: "Developers", href: "/developers", icon: <CodeXml /> },
 ];
 
-function activeKey(pathname: string): string {
-  return NAV.find((n) => pathname === n.href || pathname.startsWith(`${n.href}/`))?.key ?? "send";
+function activeKey(pathname: string): string | undefined {
+  return NAV.find((n) => pathname === n.href || pathname.startsWith(`${n.href}/`))?.key;
 }
 
 /** Where Kakushi is running: the live dot and the Arc network. Arc finality is sub-second and deterministic. */
@@ -59,7 +59,7 @@ export function ConnectButton({ block = false, large = false }: { block?: boolea
         label="Wallet"
         align="end"
         width={300}
-        triggerClassName={block ? "w-full" : "hidden xl:inline-flex"}
+        triggerClassName={block ? "w-full" : "inline-flex"}
         trigger={
           <span className="inline-flex h-11 w-full items-center gap-2.5 rounded-full bg-ui-surface-1 pr-5 pl-2 text-[15px] font-medium transition-colors hover:bg-ui-surface-2">
             <span className="grid size-7 place-items-center"><KakushiMark title="" width={24} height={24} /></span>
@@ -89,47 +89,21 @@ export function ConnectButton({ block = false, large = false }: { block?: boolea
   );
 }
 
+export function AppHeader() {
+  const pathname = usePathname() ?? "/";
+  return <TopNav
+    brand={<Logo height={30} />} brandHref="/" brandLabel="Kakushi, home"
+    items={NAV} value={activeKey(pathname)} linkAs={Link} contained
+    actions={<ConnectButton />} compactActions={<ConnectButton />}
+    sheetTitle="Kakushi" />;
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
-  const pathname = usePathname() ?? "/send";
-  const w = useWallet();
   return (
     <AppFrame className="isolate bg-transparent" panelClassName="bg-transparent">
       <Backdrop />
-      <a href="#content" className="sr-only z-[60] rounded-full bg-ui-lime px-4 py-2 font-medium text-ui-on-lime focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
-        Skip to content
-      </a>
-      <TopNav
-        brand={<Logo height={30} />}
-        brandHref="/"
-        brandLabel="Kakushi, home"
-        items={NAV}
-        value={activeKey(pathname)}
-        linkAs={Link}
-        actions={
-          <>
-            <NetworkPill compact className="inline-flex 2xl:hidden" />
-            <NetworkPill className="hidden 2xl:inline-flex" />
-            <ConnectButton />
-          </>
-        }
-        compactActions={
-          <>
-            <NetworkPill compact className="hidden md:inline-flex" />
-            {w.address ? null : <ConnectButton />}
-          </>
-        }
-        sheetTitle="Kakushi"
-        sheetFooter={
-          <>
-            <NetworkPill className="w-full justify-center" />
-            {w.address ? (
-              <SecondaryButton size="md" block icon={<LogOut />} onClick={() => w.disconnect()} className="bg-ui-surface-2 hover:bg-ui-surface-3">
-                Disconnect
-              </SecondaryButton>
-            ) : null}
-          </>
-        }
-      />
+      <a href="#content" className="sr-only z-[60] rounded-full bg-ui-lime px-4 py-2 font-medium text-ui-on-lime focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Skip to content</a>
+      <AppHeader />
       <main id="content" tabIndex={-1} className="px-4 pt-2 pb-16 outline-none sm:px-6 lg:px-10 lg:pt-0 xl:px-14 xl:pb-14">
         <div className="mx-auto w-full max-w-[1480px]">{children}</div>
       </main>

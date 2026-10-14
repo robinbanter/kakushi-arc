@@ -17,8 +17,8 @@ const serif = IBM_Plex_Serif({ subsets: ["latin"], weight: ["300", "400", "500"]
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:9210"),
-  title: { default: "Kakushi: private USDC payments on Arc", template: "%s · Kakushi" },
-  description: "Stealth addresses, a zero-knowledge USDC pool and a gasless relayer on Circle's Arc.",
+  title: { default: "Kakushi — the privacy layer for Arc", template: "%s · Kakushi" },
+  description: "Drop private USDC payments into any app with Kakushi’s SDK and payment widget on Arc testnet.",
   applicationName: "Kakushi",
   openGraph: { images: ["/art/og.jpg"] },
 };

@@ -1,6 +1,6 @@
 # Judge walkthrough
 
-Five minutes, no wallet or funds needed. Everything below is reproducible from this repo.
+Review the evidence without a wallet. To repeat live payments, use an Arc testnet wallet with USDC; the smallest shield deposit is 1 USDC plus gas.
 
 ## 1. See the proof (30 seconds)
 
@@ -42,8 +42,8 @@ pnpm --filter @kakushi/app start       # http://localhost:9210, reads the live t
 #   then start the app with KAKUSHI_RELAYER_URL=http://127.0.0.1:9202
 ```
 
-Pages: `/` landing, `/send`, `/receive`, `/shield` (deposit and withdraw), `/developers` (the `<KakushiPay>` widget demo). Without `KAKUSHI_DEPLOYMENT_FILE` it reads `deployments/arc-testnet.json` (the live deployment). Every page loads with an empty wallet; the withdraw tab needs no wallet when a relayer is configured (`KAKUSHI_RELAYER_URL`), and proves in a web worker. Screenshots: `docs/screens/testnet/`.
+Pages: `/` landing, `/send`, `/receive`, `/shield` (deposit and withdraw), `/developers` (typechecked SDK/widget setup and contract links); the real 0.01 USDC widget is on `/`. Without `KAKUSHI_DEPLOYMENT_FILE` it reads `deployments/arc-testnet.json` (the live deployment). Every page loads with an empty wallet; the withdraw tab needs no wallet when a relayer is configured (`KAKUSHI_RELAYER_URL`), and proves in a web worker. Screenshots: `docs/screens/testnet/`.
 
 ## What is not claimed
 
-Not audited; testnet only; pools are small and capped and their anonymity sets are empty (only our own test deposits); the relayer is a single operator; the FHE side of the original is not shipped; the circuit and verifier are reused from the earlier Monad project. See the README's "Honest limits".
+Not audited; testnet only; pools are small and capped and their anonymity sets are small (only our own test deposits recorded); the relayer is a single operator; the FHE side of the original is not shipped; the circuit and verifier are reused from the earlier Monad project. See the README's "Honest limits".

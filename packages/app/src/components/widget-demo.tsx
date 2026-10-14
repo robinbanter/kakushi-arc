@@ -1,65 +1,36 @@
 "use client";
 
 import { KakushiPay } from "@kakushi/widget";
-import { Coffee } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { arcChain } from "@kakushi/sdk";
-import { short } from "@/components/kit";
 import { useDeployment } from "@/lib/privacy";
 import { useRuntime } from "@/lib/runtime";
 import { useWallet } from "@/lib/wallet";
 
-/** A sample checkout (a made-up shop) with the real widget: pays the merchant privately, in USDC, on Arc. */
+/** The shipped widget against the configured deployment; no simulated payment state. */
 export function WidgetDemo() {
-  const { client, cfg } = useRuntime();
+  const { client, cfg, error } = useRuntime();
   const w = useWallet();
   const { deployment } = useDeployment();
-  const [to, setTo] = useState("");
-  const [paid, setPaid] = useState<string | null>(null);
-  useEffect(() => {
-    if (w.address && !to) setTo(w.address);
-  }, [w.address, to]);
-  if (!deployment || !client || !cfg) {
-    return <p className="text-[14px] text-ui-muted">The demo appears once the Kakushi contracts are deployed on this network.</p>;
-  }
-  return (
-    <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-      <div className="rounded-[24px] bg-white p-6 text-[#13141f]">
-        <div className="flex items-center gap-2 text-[13px] text-[#6e7080]">
-          <Coffee size={15} /> Sample checkout (real payment, testnet USDC)
-        </div>
-        <div className="mt-3 flex items-baseline justify-between">
-          <span className="text-[18px] font-medium">Flat white</span>
-          <span className="text-[18px] font-semibold">4.50 USDC</span>
-        </div>
-        <div className="mt-5">
-          <KakushiPay
-            to={to}
-            amount="4.5"
-            chain={arcChain(cfg.network, cfg.publicRpc)}
-            walletClient={w.address ? () => w.walletClient() : null}
-            publicClient={client}
-            deployment={deployment}
-            label="Pay privately"
-            theme={{ width: "100%" }}
-            onPaid={(r) => setPaid(r.stealthAddress)}
-          />
-        </div>
-        {paid ? <p className="mt-3 text-[13px] text-[#2f47f5]">Paid to one-time address {short(paid)}</p> : null}
-      </div>
-      <div className="rounded-[24px] bg-[#04060f]/80 p-6 ring-1 ring-white/[0.06]">
-        <label className="block text-[13px] text-ui-muted">
-          Merchant (wallet or st:eth: address)
-          <input value={to} onChange={(e) => setTo(e.target.value.trim())} placeholder="0x… merchant" className="mt-2 w-full rounded-full bg-ui-surface-2 px-4 py-2.5 font-mono text-[13px] text-ui-text outline-none" />
-        </label>
-        <p className="mt-4 text-[14px] text-ui-muted">Pay yourself, then open Receive to find it.</p>
-        <pre className="mt-4 overflow-x-auto rounded-[16px] bg-black/40 p-4 font-mono text-[12px] leading-relaxed text-[#c4d0ff]">{`<KakushiPay
-  to={merchant}
-  amount="4.5"   // USDC
-  chain={arc}
-  deployment={deployment}
-/>`}</pre>
-      </div>
+  const [recipient, setRecipient] = useState<string | null>(null);
+  const to = recipient ?? w.address ?? "";
+  if (error) return <p role="alert">{error}</p>;
+  if (!deployment || !client || !cfg) return <p role="status">Loading the Arc deployment…</p>;
+  return <div className="grid gap-8 md:grid-cols-2 md:items-center">
+    <div className="min-w-0">
+      <label className="block text-sm text-ui-muted">
+        Recipient wallet or stealth meta-address
+        <input value={to} onChange={(e) => setRecipient(e.target.value.trim())} placeholder="0x… or st:eth:0x…" className="mt-3 w-full rounded-xl bg-ui-surface-2 px-4 py-3 font-mono text-sm text-ui-text" />
+      </label>
+      <p className="mt-4 text-sm leading-relaxed text-ui-muted">Pay yourself to try it: connect your wallet, <Link className="text-ui-text underline underline-offset-4" href="/receive">enable private receiving</Link>, then return here. After payment, scan Receive to find your USDC.</p>
     </div>
-  );
+    <div className="min-w-0 rounded-2xl bg-ui-surface-2 p-6">
+      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-2"><span>Private payment</span><strong className="text-2xl">0.01 USDC</strong></div>
+      <KakushiPay to={to} amount="0.01" chain={arcChain(cfg.network, cfg.publicRpc)}
+        walletClient={w.address ? () => w.walletClient() : null} publicClient={client} deployment={deployment}
+        label="Pay 0.01 USDC privately" theme={{ width: "100%" }} />
+      <p className="mt-3 text-xs leading-relaxed text-ui-muted">Real {cfg.chainName} transaction. Payer also pays USDC gas. Sender and amount stay public; this widget uses stealth addresses, not the shielded pool.</p>
+    </div>
+  </div>;
 }

@@ -1,43 +1,50 @@
 "use client";
+import { CodeBlock } from "@kakushi/ui";
+import Link from "next/link";
+import samples from "@/examples/samples";
+import { useRuntime } from "@/lib/runtime";
 
-import { CodeBlock, type CodeSample } from "@kakushi/ui";
-import { Boxes, EyeOff, Package, Shield, Zap } from "lucide-react";
-import { developers } from "@/components/landing/content";
-import { WidgetDemo } from "@/components/widget-demo";
-
-const STEPS = [
-  { icon: <Package size={18} />, title: "Install", body: "pnpm install", note: "Workspace packages: @kakushi/sdk, @kakushi/widget. Not published to npm yet." },
-  { icon: <EyeOff size={18} />, title: "Pay privately", body: "StealthPay.sendToken(USDC)" },
-  { icon: <Shield size={18} />, title: "Shield", body: "Deposit, withdraw with a proof" },
-  { icon: <Zap size={18} />, title: "Go gasless", body: "Point at the relayer; the fee is USDC from the note" },
-];
+const install = `git clone https://github.com/nickthelegend/kakushi-arc.git
+cd kakushi-arc
+pnpm install
+pnpm --filter @kakushi/app dev`;
 
 export default function DevelopersPage() {
-  return (
-    <div className="mx-auto max-w-[1100px] pt-6 sm:pt-10">
-      <header className="text-center">
-        <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[#3a5cf0] px-3 text-[13px] font-medium text-white">
-          <Boxes aria-hidden size={13} /> SDK
-        </span>
-        <h1 className="mt-4 text-[clamp(40px,5.5vw,72px)] leading-[1.02]">Make your app private.</h1>
-      </header>
-      <ol className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {STEPS.map((s, i) => (
-          <li key={s.title} className="rounded-[22px] bg-ui-surface-1/80 p-5 ring-1 ring-ui-hairline-strong backdrop-blur">
-            <span className="flex items-center justify-between text-[#8ea5ff]">{s.icon}<span className="serif text-[22px] text-white/20">{i + 1}</span></span>
-            <h2 className="mt-3 text-[17px] font-medium">{s.title}</h2>
-            <p className="mt-1 font-mono text-[13px] break-words text-ui-muted">{s.body}</p>
-            {"note" in s && s.note ? <p className="mt-2 text-[12px] text-ui-dim">{s.note}</p> : null}
-          </li>
-        ))}
-      </ol>
-      <section className="mt-8 rounded-[28px] bg-ui-surface-1/80 p-5 ring-1 ring-ui-hairline-strong backdrop-blur sm:p-6">
-        <h2 className="mb-4 text-[20px] font-medium">Try the widget</h2>
-        <WidgetDemo />
-      </section>
-      <div className="mt-6">
-        <CodeBlock aria-label="Kakushi SDK examples" note={developers.note} copyable defaultKey="send" samples={developers.samples as unknown as CodeSample[]} />
-      </div>
-    </div>
-  );
+  const { cfg } = useRuntime();
+  const d = cfg?.deployment;
+  const contracts = d ? [
+    ["USDC", d.usdc], ["StealthRegistry · ERC-6538", d.stealthRegistry],
+    ["StealthAnnouncer · ERC-5564", d.stealthAnnouncer], ["StealthPay", d.stealthPay],
+    ["UltraHonk verifier", d.shieldedVerifier],
+    ...Object.entries(d.pools).map(([name, p]) => [`Shielded pool · ${name}`, p.address]),
+  ] : [];
+  return <article className="mx-auto max-w-[1100px] pt-8">
+    <h1 className="text-[clamp(44px,6vw,72px)] leading-tight">Private payments,<br />in your app.</h1>
+    <p className="mt-5 max-w-[70ch] text-lg leading-relaxed text-ui-muted">Use KakushiPay for React checkouts, or compose the SDK with your own interface. Stealth payments, shielded pools and gasless withdrawals are separate tools.</p>
+    <section className="mt-12" aria-labelledby="install-title">
+      <h2 id="install-title" className="mb-4 text-2xl">1. Install from source</h2>
+      <CodeBlock samples={[{ key: "install", label: "Install", filename: "Terminal", language: "bash", code: install }]} copyable />
+      <p className="mt-4 leading-relaxed text-ui-muted">Requires Node 22.18+, pnpm 10.29.2, React 19 and viem 2.38+. Packages are not on npm yet. In another pnpm workspace, copy packages/sdk, packages/prover, config and packages/widget, then add @kakushi/widget and @kakushi/sdk as workspace:* dependencies. Keep their workspace dependencies together.</p>
+    </section>
+    <section className="mt-12" aria-labelledby="code-title">
+      <h2 id="code-title" className="mb-4 text-2xl">2. Connect the widget or SDK</h2>
+      <p className="mb-4 leading-relaxed text-ui-muted">Copy arc.ts alongside Checkout.tsx or send.ts. These are the exact files compiled by this app’s typecheck. Configure Arc testnet in your wallet (chain 5042002, RPC https://rpc.testnet.arc.io, currency USDC). The recipient first <Link className="underline underline-offset-4 text-ui-text" href="/receive">registers on Receive</Link>, or shares a stealth meta-address directly.</p>
+      <CodeBlock samples={samples} defaultKey="Checkout.tsx" copyable aria-label="Compilable SDK and widget source" />
+      <dl className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div><dt className="font-medium">Amounts</dt><dd className="mt-1 text-ui-muted">Widget: decimal strings ("0.01") or bigint base units. SDK: bigint base units (10_000n). USDC has 6 decimals.</dd></div>
+        <div><dt className="font-medium">Wallets and receipts</dt><dd className="mt-1 text-ui-muted">Pass a viem WalletClient or an async connector, plus a PublicClient and deployment. onPaid runs after a successful receipt. Verify order amount, token and chain on your backend before fulfillment.</dd></div>
+      </dl>
+    </section>
+    <section className="mt-12" aria-labelledby="pool-title">
+      <h2 id="pool-title" className="text-2xl">3. Add shielding when you need it</h2>
+      <p className="mt-4 max-w-[75ch] leading-relaxed text-ui-muted">The widget sends a stealth payment; it does not shield funds. The <Link href="/shield" className="underline text-ui-text">Shield flow</Link> deposits fixed 1, 10 or 100 USDC notes. Save the note before depositing. Withdraw rebuilds the tree, proves in a browser worker and sends only the proof and public inputs to the relayer. The recipient needs no gas; the quoted relayer fee comes out of the note.</p>
+      <p className="mt-3 text-ui-muted">Reference implementation: packages/app/src/app/(app)/shield/page.tsx and packages/app/src/lib/prove.worker.ts. SDK exports generateNote, withdrawWitness, IncrementalMerkleTree and relayWithdraw. Keep notes and stealth keys private.</p>
+    </section>
+    <section className="mt-12" aria-labelledby="contracts-title">
+      <h2 id="contracts-title" className="text-2xl">Contracts · {cfg?.chainName ?? "loading"}</h2>
+      <p className="mt-3 text-ui-muted">Loaded from this app’s deployment record. Testnet deployment is live; mainnet is not deployed.</p>
+      <dl className="mt-5 divide-y divide-ui-hairline-strong">{contracts.map(([name, address]) => <div key={name} className="grid gap-2 py-4 md:grid-cols-[1fr_2fr]"><dt>{name}</dt><dd className="min-w-0"><a className="break-all font-mono text-sm text-ui-lime-text underline underline-offset-4" href={`${cfg?.explorer}/address/${address}`} target="_blank" rel="noreferrer">{address}</a></dd></div>)}</dl>
+    </section>
+    <aside className="mt-12 border-t border-ui-hairline-strong py-6 text-ui-muted">Small anonymity sets, a single relayer and unaudited software. Sender and amount remain public for stealth payments. FHE is next, not shipped. <a className="underline text-ui-text" href="https://github.com/nickthelegend/kakushi-arc/blob/main/docs/E2E-TESTNET.md">Read the live testnet evidence</a>.</aside>
+  </article>;
 }

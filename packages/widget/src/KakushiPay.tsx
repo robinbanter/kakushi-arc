@@ -81,7 +81,7 @@ export function KakushiPay({ label = "Pay privately", theme, className, style, d
     tone = "success";
     line = (
       <>
-        Paid privately. Only the recipient can link this payment to them.
+        Paid to a fresh stealth address. Sender and amount remain public.
         <TxLink result={k.result} explorer={opts.chain?.blockExplorers?.default.url} />
       </>
     );

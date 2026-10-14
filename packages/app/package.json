@@ -5,10 +5,10 @@
   "type": "module",
   "description": "Kakushi web app for Arc: send, receive, shield and withdraw USDC privately.",
   "scripts": {
-    "dev": "node scripts/sync-deployments.mjs && next dev -p ${PORT:-9210}",
-    "build": "node scripts/sync-deployments.mjs && next build",
+    "dev": "node scripts/sync-examples.mjs && node scripts/sync-deployments.mjs && next dev -p ${PORT:-9210}",
+    "build": "node scripts/sync-examples.mjs && node scripts/sync-deployments.mjs && next build",
     "start": "next start -p ${PORT:-9210}",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "node scripts/sync-examples.mjs && tsc --noEmit",
     "test": "vitest run test --maxWorkers=1"
   },
   "dependencies": {

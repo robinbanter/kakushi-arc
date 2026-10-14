@@ -1,8 +1,16 @@
 # Kakushi on Arc
 
-**Private USDC payments on Circle's Arc.** Pay anyone in USDC without publishing a link between you and them: one-time stealth addresses for payments, a zero-knowledge USDC pool for unlinking, and a relayer that submits withdrawals for you and is paid in USDC out of the withdrawn note. Gas on Arc is USDC, so a fresh, empty wallet can receive, hold and spend dollars without ever touching another token.
+**The privacy layer for Arc: drop private USDC payments into any app.** Integrate the source SDK with your own interface or embed `<KakushiPay>` beside your checkout. The widget resolves a recipient, approves USDC, pays a fresh stealth address and returns a confirmed receipt. Shielded pools and a gasless withdrawal relayer are separate building blocks when you need to break the deposit-to-withdrawal link.
 
-This repo is the zero-knowledge side of [Kakushi](https://github.com/nickthelegend/kakushi), ported from Monad to Arc.
+**Live (testnet):** stealth registration, payment, receive scan, shielding and browser-proved relayer withdrawal. **Fork:** local rehearsals are separate evidence. **Not run:** mainnet deployment. Stealth hides the recipient link; the sender and amount stay public. Independent pool deposits matter for privacy.
+
+## Integrate in three steps
+
+1. Clone this repository and run `pnpm install`. `@kakushi/sdk` and `@kakushi/widget` are workspace source packages, **not published npm packages**.
+2. Copy the typechecked [Arc client setup](packages/app/src/examples/arc.ts) alongside [Checkout.tsx](packages/app/src/examples/Checkout.tsx), then render `<Checkout to={recipient} />`. It embeds `<KakushiPay to={to} amount="0.01" ... />` with real clients and testnet addresses. The recipient registers on Receive or supplies a stealth meta-address.
+3. Handle the widget’s confirmed `onPaid` receipt. Verify amount, asset and chain server-side before fulfilling an order. For a custom interface, use the complete [SDK payment example](packages/app/src/examples/send.ts).
+
+The app’s `/developers` page displays these exact source files, copied by `scripts/sync-examples.mjs` before build/typecheck, with explorer links for every deployed contract. `/` contains the real 0.01 USDC widget and the privacy limits.
 
 ## What works
 
@@ -24,7 +32,7 @@ Deployed on **Arc testnet** (chain 5042002, deploy block 67017441) and exercised
 | ShieldedWithdrawVerifier (UltraHonk) | [`0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120`](https://explorer.testnet.arc.io/address/0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120) |
 | KakushiPool USDC-1 / USDC-10 / USDC-100 | [`0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4`](https://explorer.testnet.arc.io/address/0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4) / [`0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c`](https://explorer.testnet.arc.io/address/0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c) / [`0x90bbBC5A461819620F5929eDa05e36814a7DB913`](https://explorer.testnet.arc.io/address/0x90bbBC5A461819620F5929eDa05e36814a7DB913) |
 
-Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the generated Solidity verifier), 14 Noir circuit tests, 62 TypeScript tests (SDK, prover, relayer, widget, config, app copy guard). The Foundry tests run Circle's FiatToken v2.2 bytecode etched at `0x3600…0000` with the same `USDC`/`2` EIP-712 domain, 6 decimals, blocklist and pause behavior as Arc's USDC.
+Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the generated Solidity verifier), 14 Noir circuit tests (prior verified run; current sandbox blocks Nargo’s home-directory cache lock), 65 TypeScript tests (SDK, prover, relayer, widget, config, app copy guard). The Foundry tests run Circle's FiatToken v2.2 bytecode etched at `0x3600…0000` with the same `USDC`/`2` EIP-712 domain, 6 decimals, blocklist and pause behavior as Arc's USDC.
 
 ## Arc stack
 
@@ -47,7 +55,7 @@ Tests: 30 Foundry tests (including real Noir/UltraHonk proofs verified by the ge
 | SDK: stealth keys, scan, notes, witnesses, relayer client | `packages/sdk` |
 | Relayer: validates, simulates, checks fee >= gas, submits | `packages/relayer` |
 | `<KakushiPay>` widget and `useKakushiPay` hook | `packages/widget` |
-| Web app: Send, Receive, Shield (deposit and withdraw), Plugin | `packages/app` (Next.js) |
+| Web app: Pay, Receive, Shield (deposit and withdraw), Developers | `packages/app` (Next.js) |
 
 Pools are fixed at 1, 10 and 100 USDC. Each pool has an immutable cap on the number of notes it will ever accept (5,000 / 2,000 / 1,000, so at most 5k / 20k / 100k USDC at rest). There is no owner, no upgrade path and no pause.
 
@@ -77,13 +85,13 @@ The app: `pnpm --filter @kakushi/app build` and `pnpm --filter @kakushi/app star
 
 - **Not audited.** The Noir circuit and Solidity verifier come from the earlier Monad project and have had no external review. Pools are capped and immutable, so a bug cannot be patched and the cap is the damage limit.
 - **Testnet only.** It is deployed and exercised on Arc testnet; nothing is on Arc mainnet yet (`scripts/deploy.sh mainnet` is dry-run tested against the mainnet RPC). There is no hosted instance of the app: run it locally.
-- **Anonymity sets are empty.** The only deposits so far are our own two test deposits into `USDC-1` (same wallet, both already withdrawn), so today the pools give no real privacy. Privacy grows with the number of independent deposits; with a handful of notes, timing and amount can still link a deposit to a withdrawal.
+- **Anonymity sets are small.** Recorded deposits are our own test transactions, so they do not demonstrate meaningful anonymity. Privacy grows with the number of independent deposits; with a handful of notes, timing and amount can still link a deposit to a withdrawal.
 - **What stays public.** A stealth payment hides who the recipient is, not the amount or the sender. Pool deposits and withdrawals are public transactions; the proof hides which deposit a withdrawal spends.
 - **The relayer is one operator.** It cannot steal funds (recipient, relayer and fee are bound in the proof) but it can censor or go offline. Anyone can withdraw from their own wallet instead, paying USDC gas. The live relayer quoted 0.134375 USDC per withdrawal (13% of the 1 USDC pool, the price of about 3.64M gas), so the relayer omits pools where the fee exceeds 30% of the note.
 - **Circle controls USDC.** Circle can blocklist or pause USDC, which would freeze the pools like every USDC contract.
 - **Your note is your funds.** Lose it and nothing recovers the deposit.
 - **Browser proving** works: one withdrawal was proved in a web worker in headless Chromium (12.0 s, 15 s click to done) and settled on testnet. It was driven by a scripted wallet stand-in, not a real MetaMask session, and not measured on a phone.
-- **Receive scans from the deploy block** in 5,000-block `eth_getLogs` pages (Arc's public RPC limit), 6 in parallel. Fine for a beta; a private RPC or an indexer is the next step.
+- **Receive scans from the deploy block** in 5,000-block `eth_getLogs` pages (Arc's public RPC limit), sequentially with bounded backoff on RPC throttling. Fine for a beta; a private RPC or an indexer is the next step.
 
 ## Next: FHE (not shipped)
 

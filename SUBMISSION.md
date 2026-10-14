@@ -1,11 +1,24 @@
-# Kakushi on Arc
+# Kakushi — the privacy layer for Arc
 
-Kakushi makes USDC payments on Arc private. Send USDC to a one-time stealth address (ERC-5564/6538) only the recipient can find. Shield USDC in a fixed-size zero-knowledge pool (Noir/UltraHonk) and withdraw to any fresh address with a proof. A relayer submits the withdrawal and is repaid in USDC from the note, so the new wallet needs no balance and no gas token.
+## Description
 
-**Live on Arc testnet** (chain 5042002): registry, announcer, StealthPay, the UltraHonk verifier and 1/10/100 USDC pools on the real USDC at `0x3600…0000`. The core loop ran there with real transactions and proofs (shield 1 USDC, stealth-pay, recipient scans and finds it, gasless relayer withdrawal to a 0-balance address); every hash is in `docs/E2E-TESTNET.md`. The web app was driven through the same flows, including a withdrawal proved in the browser in about 12 s. Mainnet deploys with one command (`scripts/deploy.sh mainnet`), not yet run.
+Drop private USDC payments into any app. Kakushi gives Arc developers a source SDK and `<KakushiPay>` React widget: resolve a recipient, approve USDC and send to a fresh ERC-5564 stealth address. Recipients register through ERC-6538 and scan their payments. For unlinking deposits and withdrawals, fixed-size USDC pools use Noir/UltraHonk proofs generated in the browser. A relayer submits withdrawals and takes its quoted USDC fee from the note, so the recipient needs no gas.
 
-**Arc usage:** USDC as gas (fee, gas and pool asset are one asset); the 6-decimal USDC at `0x3600…0000` with 18-decimal gas converted correctly, tested against FiatToken v2.2 including the blocklist; sub-second finality; Arc Foundry forks.
+Live on Arc testnet: registration, widget payment, receive scan, shield and browser-proved relayer withdrawal. The landing page lets you try a real 0.01 USDC payment; Developers contains typechecked examples and contract links. Source packages are not on npm yet. Small anonymity sets, one relayer and unaudited software remain explicit limits. Sender and amount stay public; hidden amounts through FHE are next, not shipped. Mainnet is not deployed.
 
-**Demo:** `docs/JUDGE-WALKTHROUGH.md`. No hosted instance: run the app locally.
+## What it uses Arc for
 
-**Status:** testnet only, not audited, pools capped, anonymity sets are empty (our own two test deposits), single relayer. The FHE side of the original Kakushi is the next step and is not shipped. The circuit and verifier are reused from the earlier Monad version of the project.
+- USDC is the payment asset, pool asset, relayer fee and gas token.
+- The 6-decimal ERC-20 interface and 18-decimal native gas accounting are handled separately.
+- Deterministic finality supports prompt receipt confirmation.
+- Arc Foundry tests cover FiatToken behavior and local forks; live evidence uses the public testnet.
+
+## Demo
+
+1. Run the app and relayer as documented in README / docs/JUDGE-WALKTHROUGH.md.
+2. Connect on Receive, unlock and register your private receiving address.
+3. Return to the landing page. Pay 0.01 USDC through the actual widget; scan Receive.
+4. Shield 1 USDC after saving the note. Withdraw with an in-browser proof to a fresh address through the relayer.
+5. Open Developers for the source integration and testnet explorer links.
+
+Evidence: [live testnet transactions](docs/E2E-TESTNET.md), [browser rehearsal](docs/BROWSER-TESTNET.json), [screenshots](docs/screens/testnet/). No hosted instance is claimed.

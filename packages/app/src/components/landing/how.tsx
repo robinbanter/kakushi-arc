@@ -1,145 +1,15 @@
-"use client";
-
-import { StatusPill, cn } from "@kakushi/ui";
-import { Check, EyeOff, Shield, Zap } from "lucide-react";
-import { motion } from "motion/react";
-import { useEffect, useState } from "react";
-import { Rise, useReduced, useReveal } from "@/components/motion";
-import { EASE_REVEAL } from "@/components/motion/tokens";
-import { how } from "./content";
-import { SectionIntro, Shell } from "./section";
-
-/** "Three ways a transfer ends": a card per outcome, each with a small live visual. */
+const layers = [
+  ["Stealth hides who", "Every payment gets a fresh address. The public transaction does not name the recipient’s main wallet. Sender and amount remain visible; sharing keys or later transfers can reveal links."],
+  ["Shielding breaks the link", "Deposit 1, 10 or 100 USDC, then prove ownership of a note without revealing which deposit you spent. Independent deposits build the anonymity set; timing can still reveal links."],
+  ["A relayer pays withdrawal gas", "The recipient needs no gas to receive a shielded withdrawal. Your browser creates the proof; the relayer submits it and takes the quoted USDC fee from the note."],
+];
 export function How() {
-  return (
-    <section id="how" aria-labelledby="how-title" className="scroll-mt-24 py-20 lg:py-28">
-      <Shell>
-        <SectionIntro id="how-title" eyebrow={how.eyebrow} heading={how.heading} sub={how.sub} />
-        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:mt-16 xl:grid-cols-3">
-          {how.cards.map((card, i) => (
-            <Rise key={card.key} delay={0.12 * i} className="h-full">
-              <article className="flex h-full flex-col rounded-[30px] border border-ui-hairline-strong p-3">
-                <div className="h-[236px] overflow-hidden rounded-[24px] bg-ui-surface-1">
-                  {card.key === "pay" ? <PayVisual /> : card.key === "shield" ? <PaidVisual /> : <RelayVisual />}
-                </div>
-                <div className="flex flex-1 flex-col px-3 pt-5 pb-3">
-                  <h3 className="flex items-center gap-2.5 text-[22px] font-medium tracking-[-0.025em]">
-                    <span className={cn("grid size-8 place-items-center rounded-full text-white", card.key === "pay" ? "bg-[#2f47f5]" : card.key === "shield" ? "bg-[#c79a52]" : "bg-[#6d86e9]")}>
-                      {card.key === "pay" ? <EyeOff size={16} /> : card.key === "shield" ? <Shield size={16} /> : <Zap size={16} />}
-                    </span>
-                    {card.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-[1.5] text-ui-muted">{card.body}</p>
-                  <p className="mt-auto pt-5 text-[14px] font-medium text-ui-text">{card.foot}</p>
-                </div>
-              </article>
-            </Rise>
-          ))}
-        </div>
-      </Shell>
-    </section>
-  );
-}
-
-const HEX = "0123456789abcdef";
-const TARGET = "0x9f3c…e21a";
-
-/** A meta-address turns into a one-time address that only the recipient can find. */
-function PayVisual() {
-  const [ref, seen] = useReveal<HTMLDivElement>(0.5);
-  const reduced = useReduced();
-  const [addr, setAddr] = useState("0x????…????");
-  useEffect(() => {
-    if (!seen) return;
-    if (reduced) return setAddr(TARGET);
-    let n = 0;
-    const id = setInterval(() => {
-      n++;
-      if (n > 14) {
-        clearInterval(id);
-        setAddr(TARGET);
-        return;
-      }
-      setAddr(TARGET.split("").map((ch, k) => (ch === "…" || k < 2 || n > 4 + k ? ch : HEX[Math.floor(Math.random() * 16)])).join(""));
-    }, 70);
-    return () => clearInterval(id);
-  }, [seen, reduced]);
-  return (
-    <div ref={ref} className="flex h-full flex-col justify-center gap-3 px-5">
-      <div className="rounded-[16px] bg-ui-canvas px-4 py-3">
-        <p className="text-[12px] text-ui-muted">Pay to</p>
-        <p className="mt-0.5 truncate font-mono text-[13px]">st:eth:0x02a1…7f9c</p>
-      </div>
-      <div className="flex justify-center text-ui-muted">↓</div>
-      <div className="rounded-[16px] bg-[#101a4a] px-4 py-3 ring-1 ring-[#3b55ff]/40">
-        <p className="text-[12px] text-[#c4d0ff]">Lands on</p>
-        <p className="mt-0.5 font-mono text-[18px] font-medium">{addr}</p>
-      </div>
-      <p className="text-center text-[12px] text-ui-muted">New address every payment</p>
+  return <section className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6" aria-labelledby="how-title">
+    <h2 id="how-title" className="serif text-4xl sm:text-5xl">Three layers. Use what you need.</h2>
+    <div className="mt-8 divide-y divide-ui-hairline-strong">
+      {layers.map(([title, body]) => <div key={title} className="grid gap-3 py-7 md:grid-cols-[1fr_2fr] md:gap-12">
+        <h3 className="text-xl font-medium">{title}</h3><p className="max-w-[70ch] leading-relaxed text-ui-muted">{body}</p>
+      </div>)}
     </div>
-  );
-}
-
-/** Deposit with a commitment, withdraw elsewhere with a proof. */
-function PaidVisual() {
-  const [ref, seen] = useReveal<HTMLDivElement>(0.5);
-  const reduced = useReduced();
-  const [step, setStep] = useState(0);
-  useEffect(() => {
-    if (!seen) return;
-    if (reduced) return setStep(2);
-    const t1 = setTimeout(() => setStep(1), 500);
-    const t2 = setTimeout(() => setStep(2), 1400);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [seen, reduced]);
-  return (
-    <div ref={ref} className="flex h-full flex-col justify-center gap-3 px-5">
-      <div className="flex items-center justify-between rounded-[16px] bg-ui-canvas px-4 py-3 text-[14px]">
-        <span className="text-ui-muted">Deposit</span>
-        <span className="ui-figure font-medium">10 USDC</span>
-      </div>
-      <motion.div animate={{ opacity: step >= 1 ? 1 : 0.3 }} className="flex items-center justify-center gap-2 text-[13px] text-[#f2c27a]">
-        <span className="size-1.5 rounded-full bg-current" /> Pool of 10 USDC deposits
-      </motion.div>
-      <motion.div animate={{ opacity: step >= 2 ? 1 : 0.35, scale: step >= 2 ? 1 : 0.98 }} transition={{ duration: 0.35, ease: EASE_REVEAL }} className="flex items-center justify-between rounded-[16px] bg-ui-canvas px-4 py-3">
-        <span className="flex items-center gap-2 text-[14px]">
-          <span className={cn("grid size-6 place-items-center rounded-full", step >= 2 ? "bg-ui-lime-button text-white" : "bg-ui-surface-2 text-ui-muted")}>
-            <Check size={13} strokeWidth={2.5} aria-hidden />
-          </span>
-          Withdraw to a new wallet
-        </span>
-        <StatusPill tone={step >= 2 ? "lime" : "neutral"} size="sm">{step >= 2 ? "Proof ok" : "…"}</StatusPill>
-      </motion.div>
-    </div>
-  );
-}
-
-/** A relayer pays the gas and is repaid in USDC out of the note. */
-function RelayVisual() {
-  const [ref, seen] = useReveal<HTMLDivElement>(0.5);
-  const reduced = useReduced();
-  const [step, setStep] = useState(0);
-  useEffect(() => {
-    if (!seen) return;
-    if (reduced) return setStep(3);
-    const timers = [1, 2, 3].map((n) => setTimeout(() => setStep(n), 300 + n * 500));
-    return () => timers.forEach(clearTimeout);
-  }, [seen, reduced]);
-  const rows = ["Proof made in your browser", "Relayer pays the gas", "Fresh wallet gets 0.87 USDC"];
-  return (
-    <div ref={ref} className="flex h-full flex-col justify-center gap-2.5 p-5">
-      {rows.map((r, i) => (
-        <div key={r} className={cn("flex items-center gap-2.5 rounded-[14px] bg-ui-canvas px-3.5 py-2.5 text-[14px] transition-opacity", step > i ? "opacity-100" : "opacity-30")}>
-          <span className={cn("grid size-6 place-items-center rounded-full", step > i ? "bg-ui-pill-purple text-ui-pill-purple-text" : "bg-ui-surface-2")}>
-            <Check size={13} strokeWidth={2.5} aria-hidden />
-          </span>
-          {r}
-        </div>
-      ))}
-      <p className="text-center text-[12px] text-ui-muted">Example from the live 1 USDC pool: fee 0.13 USDC, inside the proof</p>
-    </div>
-  );
+  </section>;
 }
