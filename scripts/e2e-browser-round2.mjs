@@ -44,6 +44,24 @@ try{
  }
  await page.goto(base+'/shield',{waitUntil:'networkidle'});await page.getByRole('button',{name:'Withdraw',exact:true}).click();await page.getByRole('textbox',{name:'Your note'}).fill('invalid-note');await page.getByText('Not a Kakushi note',{exact:true}).waitFor();
  await page.goto(base+'/send',{waitUntil:'networkidle'});await page.getByRole('button',{name:'Connect',exact:true}).filter({visible:true}).first().click();await page.getByRole('alert').getByText(/No browser wallet/).waitFor();
+ if(process.env.LIVE!=='1'){
+ // Read-only wallet controls: public test address only, no signing or broadcast methods.
+ await context.addInitScript(({account})=>{
+  const listeners=new Map();
+  window.ethereum={request:async({method})=>{if(method==='eth_requestAccounts')return [account];throw Error('Read-only account fixture');},on:(event,fn)=>listeners.set(event,fn),removeListener:(event)=>listeners.delete(event)};
+  window.round2AccountsChanged=accounts=>listeners.get('accountsChanged')?.(accounts);
+ },{account:cfg.deployment.deployer});
+ await page.goto(base+'/receive',{waitUntil:'networkidle'});
+ await page.getByRole('button',{name:'Connect',exact:true}).filter({visible:true}).first().click();
+ await page.getByRole('button',{name:'Unlock with your wallet',exact:true}).waitFor();
+ await page.evaluate(()=>window.round2AccountsChanged([]));
+ await page.getByRole('button',{name:'Connect wallet',exact:true}).waitFor();
+ await page.getByRole('button',{name:'Connect',exact:true}).filter({visible:true}).first().click();
+ await page.getByRole('button',{name:'Wallet',exact:true}).filter({visible:true}).first().click();
+ await page.getByRole('menuitem',{name:'Disconnect',exact:true}).click();
+ await page.getByRole('button',{name:'Connect wallet',exact:true}).waitFor();
+ report.walletControls={mode:'read-only public account fixture; no signing',accountsChanged:true,disconnect:true};
+ }
  const missing=await page.goto(base+'/route-does-not-exist',{waitUntil:'domcontentloaded'});assert.equal(missing.status(),404);
  report.errors=report.errors.filter(e=>!e.includes('404'));
  if(process.env.LIVE==='1'){const {runLive}=await import('./round2-live.mjs');await runLive({context,page,base,cfg,report,out});}
