@@ -21,4 +21,4 @@ Live on Arc testnet: registration, widget payment, receive scan, shield and brow
 4. Shield 1 USDC after saving the note. Withdraw with an in-browser proof to a fresh address through the relayer.
 5. Open Developers for the source integration and testnet explorer links.
 
-Evidence: [live testnet transactions](docs/E2E-TESTNET.md), [browser rehearsal](docs/BROWSER-TESTNET.json), [screenshots](docs/screens/testnet/). No hosted instance is claimed.
+Evidence: [live testnet transactions](docs/E2E-TESTNET.md), [browser rehearsal](docs/BROWSER-TESTNET.json), [screenshots](docs/screens/testnet/). Hosted frontend: https://kakushi-arc.vercel.app. [Vercel verification](docs/HOSTED.md).

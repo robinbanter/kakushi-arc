@@ -45,6 +45,9 @@ importers:
       '@kakushi/prover':
         specifier: workspace:*
         version: link:../prover
+      '@kakushi/relayer':
+        specifier: workspace:*
+        version: link:../relayer
       '@kakushi/sdk':
         specifier: workspace:*
         version: link:../sdk

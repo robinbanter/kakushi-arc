@@ -59,7 +59,7 @@ export function publicRuntimeConfig(): RuntimeConfig {
     explorer: c.explorer,
     usdc: c.usdc,
     deployment,
-    relayer: Boolean(relayerBase()),
+    relayer: Boolean(process.env.RELAYER_KEY || relayerBase()),
     publicRpc: c.publicRpc,
     error: deployment ? error : (error ?? `Kakushi is not deployed on ${c.name} yet.`),
   };

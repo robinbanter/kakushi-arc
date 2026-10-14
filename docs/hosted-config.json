@@ -1,0 +1,22 @@
+{
+  "base": "https://kakushi-arc.vercel.app",
+  "routes": [
+    "/",
+    "/send",
+    "/receive",
+    "/shield",
+    "/developers"
+  ],
+  "api": [
+    "/api/config",
+    "/api/relayer/info",
+    "/api/relayer/health"
+  ],
+  "contract": "0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c",
+  "firstStep": {
+    "route": "/",
+    "role": "link",
+    "name": "Try a private payment",
+    "expect": "Pay yourself to try it"
+  }
+}

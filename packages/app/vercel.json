@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd ../.. && npx --yes pnpm@10.29.2 install --frozen-lockfile --filter @kakushi/app...",
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next"
+}

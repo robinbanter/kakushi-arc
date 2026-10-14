@@ -1,0 +1,12 @@
+**/node_modules
+**/.next
+**/.env*
+**/.git
+**/.run
+**/.fork
+**/broadcast
+**/cache
+**/out
+**/target
+docs/screens
+packages/contracts/lib

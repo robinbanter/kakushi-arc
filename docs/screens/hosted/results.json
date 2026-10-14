@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-14T14:28:55.477Z",
+  "base": "https://kakushi-arc.vercel.app",
+  "results": [
+    {
+      "route": "/",
+      "status": 200,
+      "consoleErrors": [],
+      "badImages": [],
+      "bodyPresent": true,
+      "ok": true
+    },
+    {
+      "route": "/send",
+      "status": 200,
+      "consoleErrors": [],
+      "badImages": [],
+      "bodyPresent": true,
+      "ok": true
+    },
+    {
+      "route": "/receive",
+      "status": 200,
+      "consoleErrors": [],
+      "badImages": [],
+      "bodyPresent": true,
+      "ok": true
+    },
+    {
+      "route": "/shield",
+      "status": 200,
+      "consoleErrors": [],
+      "badImages": [],
+      "bodyPresent": true,
+      "ok": true
+    },
+    {
+      "route": "/developers",
+      "status": 200,
+      "consoleErrors": [],
+      "badImages": [],
+      "bodyPresent": true,
+      "ok": true
+    },
+    {
+      "firstStep": "Try a private payment",
+      "ok": true
+    },
+    {
+      "api": "/api/config",
+      "status": 200,
+      "ok": true,
+      "data": {
+        "network": "testnet",
+        "chainId": 5042002,
+        "chainName": "Arc Testnet",
+        "explorer": "https://explorer.testnet.arc.io",
+        "usdc": "0x3600000000000000000000000000000000000000",
+        "deployment": {
+          "network": "testnet",
+          "chainId": 5042002,
+          "deployer": "0x0648aDF1967692A0c991d7715b0b588452321FBd",
+          "deployBlock": 67017441,
+          "usdc": "0x3600000000000000000000000000000000000000",
+          "stealthRegistry": "0xc79A4Aa7396c3e67ee461C3A92fFc4258e49361B",
+          "stealthAnnouncer": "0x106364d30fBE8F05ca83b9c0F202EAE41b2C8a3e",
+          "stealthPay": "0x234384Adcbcbaf68145A42f13b0E666444961C0e",
+          "shieldedVerifier": "0x6BcCd21b9f5A7eA3D3bA99310B100c8EC6c29120",
+          "pools": {
+            "USDC-1": {
+              "address": "0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4",
+              "denomination": "1000000",
+              "maxDeposits": 5000,
+              "decimals": 6
+            },
+            "USDC-10": {
+              "address": "0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c",
+              "denomination": "10000000",
+              "maxDeposits": 2000,
+              "decimals": 6
+            },
+            "USDC-100": {
+              "address": "0x90bbBC5A461819620F5929eDa05e36814a7DB913",
+              "denomination": "100000000",
+              "maxDeposits": 1000,
+              "decimals": 6
+            }
+          }
+        },
+        "relayer": true,
+        "publicRpc": "https://rpc.testnet.arc.io"
+      }
+    },
+    {
+      "api": "/api/relayer/info",
+      "status": 200,
+      "ok": true,
+      "data": {
+        "address": "0xAF4CD54d331dEb3418046772346acC86C90A6b16",
+        "chainId": 5042002,
+        "feeByPool": {
+          "0x5f75F493D98DC89E9cD79e160be66FB61Dff42A4": "134375",
+          "0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c": "134375",
+          "0x90bbBC5A461819620F5929eDa05e36814a7DB913": "134375"
+        },
+        "gasPrice": "25000000000",
+        "quoteGas": "4300000"
+      }
+    },
+    {
+      "api": "/api/relayer/health",
+      "status": 200,
+      "ok": true,
+      "data": {
+        "ok": true,
+        "chainId": 5042002,
+        "address": "0xAF4CD54d331dEb3418046772346acC86C90A6b16",
+        "balanceUsdc": "429953"
+      }
+    },
+    {
+      "liveTestnetContract": "0x32d29e83f6E9fD7618cd52bCFb3af63fFf195C8c",
+      "codeBytes": 13241,
+      "ok": true
+    },
+    {
+      "mobileOverflow": false,
+      "ok": true
+    }
+  ]
+}

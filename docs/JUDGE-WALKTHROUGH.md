@@ -1,3 +1,5 @@
+Hosted Arc testnet: https://kakushi-arc.vercel.app. [Hosting checks](HOSTED.md).
+
 # Judge walkthrough
 
 Review the evidence without a wallet. To repeat live payments, use an Arc testnet wallet with USDC; the smallest shield deposit is 1 USDC plus gas.

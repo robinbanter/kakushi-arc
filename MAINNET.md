@@ -47,7 +47,7 @@ forge verify-contract <address> src/privacy/KakushiPool.sol:KakushiPool --chain 
 
 ## 5. Services
 
-- **Relayer** (needed for gasless withdrawals): one small Node process, no database. Run on any host (Railway, a VM):
+- **Relayer** (needed for gasless withdrawals): a request/response service with no database. The current testnet deployment uses `/api/relayer/*` Vercel functions; mainnet is explicitly rejected there. For local demos:
 
   ```bash
   RELAYER_KEY=0x… KAKUSHI_NETWORK=mainnet RELAYER_HOST=0.0.0.0 RELAYER_PORT=3715 pnpm relayer
@@ -64,7 +64,7 @@ Deploy `packages/app` (framework Next.js, root directory `packages/app`; the bui
 | Variable | Value |
 | --- | --- |
 | `KAKUSHI_NETWORK` | `mainnet` |
-| `KAKUSHI_RELAYER_URL` | the relayer's public URL (the app proxies `/api/relayer/*` to it) |
+| `KAKUSHI_RELAYER_URL` | optional external relayer URL; hosted testnet uses server-only `RELAYER_KEY` instead |
 | `ARC_RPC_URL` | optional private RPC |
 
 Build with the workspace install (`pnpm install` at the repo root), because the app imports `@kakushi/sdk`, `@kakushi/widget`, `@kakushi/prover` and `@kakushi/ui` as source.
