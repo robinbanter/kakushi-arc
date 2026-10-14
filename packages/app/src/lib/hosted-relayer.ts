@@ -1,4 +1,5 @@
 import { privateKeyToAccount } from "viem/accounts";
+import { chainByNetwork } from "@kakushi/config";
 import { Relayer } from "../../../relayer/src/relayer";
 import { poolsOf } from "../../../relayer/src/config";
 import { RelayError } from "../../../relayer/src/validate";
@@ -9,10 +10,12 @@ const json = (data: unknown, status = 200) => new Response(JSON.stringify(data, 
 export async function localRelay(req: Request, route: string) {
   try {
     const deployment = loadRuntimeDeployment();
-    if (network() !== "testnet" || deployment?.chainId !== 5042002) return json({ error: "Hosted relay only supports Arc testnet" }, 503);
-    cached ??= new Relayer({ account: privateKeyToAccount(process.env.RELAYER_KEY as `0x${string}`), pools: poolsOf(deployment), network: "testnet", rpc: serverRpc(), log: () => {} });
+    const selectedNetwork = network();
+    const chainId = chainByNetwork(selectedNetwork).chainId;
+    if (!deployment || deployment.chainId !== chainId) return json({ error: "Relayer deployment does not match the configured Arc network" }, 503);
+    cached ??= new Relayer({ account: privateKeyToAccount(process.env.RELAYER_KEY as `0x${string}`), pools: poolsOf(deployment), network: selectedNetwork, rpc: serverRpc(), log: () => {} });
     if (req.method === "GET" && route === "info") return json(await cached.quote());
-    if (req.method === "GET" && route === "health") return json({ ok: true, chainId: 5042002, address: cached.address, balanceUsdc: await cached.balance() });
+    if (req.method === "GET" && route === "health") return json({ ok: true, chainId, address: cached.address, balanceUsdc: await cached.balance() });
     if (req.method !== "POST" || route !== "relay") return json({ error: "Method not allowed" }, 405);
     const reader = req.body?.getReader();
     if (!reader) return json({ error: "Body required" }, 400);
