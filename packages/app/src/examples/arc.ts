@@ -1,15 +1,17 @@
 import { arcChain } from "@kakushi/sdk";
 import { createPublicClient, createWalletClient, custom, http, type EIP1193Provider } from "viem";
 
-export const chain = arcChain("testnet");
+import record from "../../../../deployments/arc-mainnet.json";
+const network = "mainnet";
+export const chain = arcChain(network);
 export const deployment = {
-  stealthRegistry: "0xc79A4Aa7396c3e67ee461C3A92fFc4258e49361B",
-  stealthPay: "0x234384Adcbcbaf68145A42f13b0E666444961C0e",
-  usdc: "0x3600000000000000000000000000000000000000",
-} as const;
+  stealthRegistry: record.stealthRegistry as `0x${string}`,
+  stealthPay: record.stealthPay as `0x${string}`,
+  usdc: record.usdc as `0x${string}`,
+};
 export const publicClient = createPublicClient({ chain, transport: http() });
 
-// Call from a user action. The widget asks the wallet to switch to Arc testnet.
+// Call from a user action. The widget asks the wallet to switch to the selected Arc network.
 export async function connectWallet() {
   const provider = (window as unknown as { ethereum?: EIP1193Provider }).ethereum;
   if (!provider) throw new Error("Install a browser wallet first");

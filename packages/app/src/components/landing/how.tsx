@@ -18,7 +18,7 @@ export function How() {
       </li>)}
     </ol>
     <div className="mt-12 border-t border-ui-hairline-strong pt-10">
-      <h3 className="mb-3 text-2xl">Try it, on Arc testnet.</h3>
+      <h3 className="mb-3 text-2xl">Try it, on Arc.</h3>
       <p className="mb-8 max-w-[70ch] text-ui-muted">This is the real KakushiPay widget. Stealth payments and shielded withdrawals are separate paths; this checkout sends a stealth payment.</p>
       <WidgetDemo />
     </div>

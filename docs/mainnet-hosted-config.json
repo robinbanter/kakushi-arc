@@ -1,0 +1,17 @@
+[
+  {
+    "base": "https://kakushi-arc.vercel.app",
+    "routes": [
+      "/",
+      "/send",
+      "/receive",
+      "/shield",
+      "/developers"
+    ],
+    "name": "kakushi",
+    "contract": "0xD8236B9BD4D141a3868B52a3Da01bA8e0074c2f1",
+    "networkApi": "https://kakushi-arc.vercel.app/api/config",
+    "requireVisible": true,
+    "requireExplorer": true
+  }
+]

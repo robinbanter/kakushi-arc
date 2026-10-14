@@ -14,7 +14,7 @@ export function Hero() {
         <Button asChild variant="white" size="lg"><a href="#try">Try a private payment</a></Button>
         <Button asChild variant="outline" size="lg"><Link href="/developers">Integrate Kakushi</Link></Button>
       </div>
-      <p className="mt-6 text-sm text-ui-muted">Live (testnet) · USDC-native · Noir / UltraHonk</p>
+      <p className="mt-6 text-sm text-ui-muted">Live on Arc {process.env.NEXT_PUBLIC_KAKUSHI_NETWORK === "mainnet" ? "mainnet" : "testnet"} · USDC-native · Noir / UltraHonk</p>
     </div>
   </section>;
 }

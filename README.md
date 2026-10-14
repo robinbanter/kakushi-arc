@@ -1,5 +1,7 @@
 # Kakushi on Arc
 
+Live: https://kakushi-arc.vercel.app (Arc mainnet, chain 5042)
+
 **The private execution layer for Arc.** Kakushi move unseen. Your payment arrives.
 
 Composable payment privacy for existing Arc apps: stealth USDC payments, in-browser Noir/UltraHonk proofs and user-controlled disclosure. Kakushi is **not a rollup**, uses **no TEE**, and does not provide arbitrary confidential program execution. Its ZK verification does not require trusting a hardware vendor.
@@ -32,7 +34,7 @@ The complete client module is typechecked in [Checkout.tsx](packages/app/src/exa
 
 
 1. Clone this repository and run `pnpm install`. `@kakushi/sdk` and `@kakushi/widget` are workspace source packages, **not published npm packages**.
-2. Copy the typechecked [Arc client setup](packages/app/src/examples/arc.ts) alongside [Checkout.tsx](packages/app/src/examples/Checkout.tsx), then render `<Checkout to={recipient} />`. It embeds `<KakushiPay to={to} amount="0.01" ... />` with real clients and testnet addresses. The recipient registers on Receive or supplies a stealth meta-address.
+2. Copy the typechecked [Arc client setup](packages/app/src/examples/arc.ts) alongside [Checkout.tsx](packages/app/src/examples/Checkout.tsx), then render `<Checkout to={recipient} />`. It embeds `<KakushiPay to={to} amount="0.01" ... />` with real clients and mainnet addresses. The recipient registers on Receive or supplies a stealth meta-address.
 3. Handle the widget’s confirmed `onPaid` receipt. Verify amount, asset and chain server-side before fulfilling an order. For a custom interface, use the complete [SDK payment example](packages/app/src/examples/send.ts).
 
 The app’s `/developers` page displays these exact source files, copied by `scripts/sync-examples.mjs` before build/typecheck, with explorer links for every deployed contract. `/` contains the real 0.01 USDC widget and the privacy limits.
@@ -109,7 +111,7 @@ The app: `pnpm --filter @kakushi/app build` and `pnpm --filter @kakushi/app star
 ## Honest limits
 
 - **Not audited.** The Noir circuit and Solidity verifier come from the earlier Monad project and have had no external review. Pools are capped and immutable, so a bug cannot be patched and the cap is the damage limit.
-- **This hosted demo uses testnet only.** Existing mainnet deployment evidence is separate; this product-quality round sent no mainnet transactions. The frontend and HTTP relayer are hosted at https://kakushi-arc.vercel.app; see [hosting checks](docs/HOSTED.md).
+- **Production now uses Arc mainnet.** Earlier product-quality verification used testnet; this hosting migration sends no transactions. The frontend and HTTP relayer are hosted at https://kakushi-arc.vercel.app; see [hosting checks](docs/HOSTED.md).
 - **Anonymity sets are small.** Recorded deposits are our own test transactions, so they do not demonstrate meaningful anonymity. Privacy grows with the number of independent deposits; with a handful of notes, timing and amount can still link a deposit to a withdrawal.
 - **What stays public.** A stealth payment hides who the recipient is, not the amount or the sender. Pool deposits and withdrawals are public transactions; the proof hides which deposit a withdrawal spends.
 - **The relayer is one operator.** It cannot steal funds (recipient, relayer and fee are bound in the proof) but it can censor or go offline. Anyone can withdraw from their own wallet instead, paying USDC gas. The live relayer quoted 0.134375 USDC per withdrawal (13% of the 1 USDC pool, the price of about 3.64M gas), so the relayer omits pools where the fee exceeds 30% of the note.
@@ -150,3 +152,7 @@ Testnet **5042002: Live**; [testnet deployment](deployments/arc-testnet.json) an
 
 Mainnet smoke: [Smoke: send 0.01 USDC to recoverable stealth address](https://explorer.arc.io/tx/0x84ac4f8f66295a10d177d450e65833b132d48ae63055ff2a529db90de51a067b).
 <!-- /MAINNET-ADDRESSES -->
+
+## Production network
+
+The frontend and relayer select `deployments/arc-mainnet.json`, RPC `https://rpc.mainnet.arc.io` and explorer `https://explorer.arc.io`. [Read-only hosted checks](docs/HOSTED-MAINNET.md). Prior **Live (testnet)** and **Fork** results remain separate evidence. Mainnet transactions were not sent by this hosting migration.

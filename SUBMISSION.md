@@ -1,5 +1,7 @@
 # Kakushi — the private execution layer for Arc
 
+Live: https://kakushi-arc.vercel.app (Arc mainnet, chain 5042)
+
 ## Description
 
 Kakushi move unseen. Your payment arrives. The private execution layer for Arc gives existing apps composable USDC payment privacy: a source SDK and three-line KakushiPay integration after client setup.
@@ -23,7 +25,7 @@ Live on testnet. Sender and amounts remain public. Small anonymity sets, one rel
 2. Connect on Receive, unlock and register your private receiving address.
 3. Return to the landing page. Pay 0.01 USDC through the actual widget; scan Receive.
 4. Shield 1 USDC after saving the note. Withdraw with an in-browser proof to a fresh address through the relayer.
-5. Open Developers for the source integration and testnet explorer links.
+5. Open Developers for the source integration and mainnet explorer links.
 
 Evidence: [live testnet transactions](docs/E2E-TESTNET.md), [browser rehearsal](docs/BROWSER-TESTNET.json), [screenshots](docs/screens/testnet/). Hosted frontend: https://kakushi-arc.vercel.app. [Vercel verification](docs/HOSTED.md).
 
@@ -43,3 +45,7 @@ Testnet **5042002: Live**; [testnet deployment](deployments/arc-testnet.json) an
 
 Mainnet smoke: [Smoke: send 0.01 USDC to recoverable stealth address](https://explorer.arc.io/tx/0x84ac4f8f66295a10d177d450e65833b132d48ae63055ff2a529db90de51a067b).
 <!-- /MAINNET-ADDRESSES -->
+
+## Production network
+
+The frontend and relayer select `deployments/arc-mainnet.json`, RPC `https://rpc.mainnet.arc.io` and explorer `https://explorer.arc.io`. [Read-only hosted checks](docs/HOSTED-MAINNET.md). Prior **Live (testnet)** and **Fork** results remain separate evidence. Mainnet transactions were not sent by this hosting migration.

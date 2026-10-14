@@ -32,7 +32,7 @@ export default function DevelopersPage() {
     </section>
     <section className="mt-12" aria-labelledby="code-title">
       <h2 id="code-title" className="mb-4 text-2xl">2. Connect the widget or SDK</h2>
-      <p className="mb-4 leading-relaxed text-ui-muted">Copy arc.ts alongside Checkout.tsx or send.ts. These are the exact files compiled by this app’s typecheck. Configure Arc testnet in your wallet (chain 5042002, RPC https://rpc.testnet.arc.io, currency USDC). The recipient first <Link className="underline underline-offset-4 text-ui-text" href="/receive">registers on Receive</Link>, or shares a stealth meta-address directly.</p>
+      <p className="mb-4 leading-relaxed text-ui-muted">Copy arc.ts alongside Checkout.tsx or send.ts. These are the exact files compiled by this app’s typecheck. Configure {cfg?.chainName ?? "Arc"} in your wallet (chain {cfg?.chainId ?? "loading"}, currency USDC). The recipient first <Link className="underline underline-offset-4 text-ui-text" href="/receive">registers on Receive</Link>, or shares a stealth meta-address directly.</p>
       <CodeBlock samples={samples} defaultKey="Checkout.tsx" copyable aria-label="Compilable SDK and widget source" />
       <dl className="mt-6 grid gap-4 sm:grid-cols-2">
         <div><dt className="font-medium">Amounts</dt><dd className="mt-1 text-ui-muted">Widget: decimal strings ("0.01") or bigint base units. SDK: bigint base units (10_000n). USDC has 6 decimals.</dd></div>
@@ -51,9 +51,9 @@ export default function DevelopersPage() {
     </section>
     <section className="mt-12" aria-labelledby="contracts-title">
       <h2 id="contracts-title" className="text-2xl">Contracts · {cfg?.chainName ?? "loading"}</h2>
-      <p className="mt-3 text-ui-muted">Loaded from this app’s deployment record. This demo uses Arc testnet. Mainnet deployment evidence is recorded separately in the repository; these examples use testnet funds only.</p>
+      <p className="mt-3 text-ui-muted">Loaded from this app’s deployment record. The examples target Arc mainnet. Check the chain and addresses before sending; mainnet uses real USDC.</p>
       <dl className="mt-5 divide-y divide-ui-hairline-strong">{contracts.map(([name, address]) => <div key={name} className="grid gap-2 py-4 md:grid-cols-[1fr_2fr]"><dt>{name}</dt><dd className="min-w-0"><a className="break-all font-mono text-sm text-ui-lime-text underline underline-offset-4" href={`${cfg?.explorer}/address/${address}`} target="_blank" rel="noreferrer">{address}</a></dd></div>)}</dl>
     </section>
-    <aside className="mt-12 border-t border-ui-hairline-strong py-6 text-ui-muted">Small anonymity sets, a single relayer and unaudited software. Sender and amount remain public for stealth payments. FHE is next, not shipped. <a className="underline text-ui-text" href="https://github.com/nickthelegend/kakushi-arc/blob/main/docs/E2E-TESTNET.md">Read the live testnet evidence</a>.</aside>
+    <aside className="mt-12 border-t border-ui-hairline-strong py-6 text-ui-muted">Small anonymity sets, a single relayer and unaudited software. Sender and amount remain public for stealth payments. FHE is next, not shipped. <a className="underline text-ui-text" href="https://github.com/nickthelegend/kakushi-arc/blob/main/docs/E2E-TESTNET.md">Read earlier verification evidence</a>.</aside>
   </article>;
 }

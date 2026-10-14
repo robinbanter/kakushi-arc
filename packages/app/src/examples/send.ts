@@ -4,7 +4,7 @@ import { chain, deployment, publicClient, connectWallet } from "./arc";
 
 export async function payRegisteredRecipient(recipient: Address) {
   const wallet = await connectWallet();
-  await wallet.switchChain({ id: chain.id }); // Add Arc testnet to the wallet first.
+  await wallet.switchChain({ id: chain.id }); // Add Arc mainnet to the wallet first.
   const meta = await readStealthMetaAddress(
     publicClient, deployment.stealthRegistry, recipient,
   );
