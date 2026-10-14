@@ -42,7 +42,7 @@ ARGS=(script script/Deploy.s.sol --rpc-url "$RPC")
 if [ -n "$DRY" ]; then
   export KAKUSHI_OUT="../../deployments/arc-$NET.dryrun.json"
 else
-  ARGS+=(--broadcast)
+  ARGS+=(--broadcast --slow)
   export KAKUSHI_OUT="$OUT"
 fi
 

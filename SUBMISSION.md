@@ -22,3 +22,20 @@ Live on Arc testnet: registration, widget payment, receive scan, shield and brow
 5. Open Developers for the source integration and testnet explorer links.
 
 Evidence: [live testnet transactions](docs/E2E-TESTNET.md), [browser rehearsal](docs/BROWSER-TESTNET.json), [screenshots](docs/screens/testnet/). Hosted frontend: https://kakushi-arc.vercel.app. [Vercel verification](docs/HOSTED.md).
+
+<!-- MAINNET-ADDRESSES -->
+## Addresses — live mainnet and testnet
+
+Mainnet **5042: Live**, deployed 2026-10-14. [All mainnet addresses and transaction receipts](docs/MAINNET-DEPLOYMENT.md).
+Testnet **5042002: Live**; [testnet deployment](deployments/arc-testnet.json) and [testnet evidence](docs/E2E-TESTNET.md).
+
+- pools.USDC-1.address: [0x452827fC2f27624d23196E072e544728f26b555C](https://explorer.arc.io/address/0x452827fC2f27624d23196E072e544728f26b555C).
+- pools.USDC-10.address: [0xA10D52219aD3B7Faa42B19a3AB24f90451A92182](https://explorer.arc.io/address/0xA10D52219aD3B7Faa42B19a3AB24f90451A92182).
+- pools.USDC-100.address: [0xBF022d69eb2E191f68427290F63b7D258f8478B1](https://explorer.arc.io/address/0xBF022d69eb2E191f68427290F63b7D258f8478B1).
+- shieldedVerifier: [0x40c4dAEDd743AE54c4aEe432636562Cc13e191a1](https://explorer.arc.io/address/0x40c4dAEDd743AE54c4aEe432636562Cc13e191a1).
+- stealthAnnouncer: [0x6d5CeEe9966203Ca33eD94Db75D388e217F91caa](https://explorer.arc.io/address/0x6d5CeEe9966203Ca33eD94Db75D388e217F91caa).
+- stealthPay: [0xD8236B9BD4D141a3868B52a3Da01bA8e0074c2f1](https://explorer.arc.io/address/0xD8236B9BD4D141a3868B52a3Da01bA8e0074c2f1).
+- stealthRegistry: [0x8Dde7Ef3c21F61DC3956CD563b71D44D14D5f524](https://explorer.arc.io/address/0x8Dde7Ef3c21F61DC3956CD563b71D44D14D5f524).
+
+Mainnet smoke: [Smoke: send 0.01 USDC to recoverable stealth address](https://explorer.arc.io/tx/0x84ac4f8f66295a10d177d450e65833b132d48ae63055ff2a529db90de51a067b).
+<!-- /MAINNET-ADDRESSES -->
