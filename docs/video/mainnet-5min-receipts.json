@@ -1,0 +1,112 @@
+{
+  "project": "kakushi",
+  "chainId": 5042,
+  "url": "https://kakushi-arc.vercel.app",
+  "renderedAt": "2026-10-14T18:58:24.619Z",
+  "transactions": [
+    {
+      "hash": "0x43eada6045e4da740bd7eb48161739aa76bd40ef471c2c2a4ac7a5a80de7e8a9",
+      "action": "Fund rotating demo wallet 1.2 USDC",
+      "status": "success",
+      "feeWei": "441000000000000",
+      "blockNumber": "25956517",
+      "url": "https://explorer.arc.io/tx/0x43eada6045e4da740bd7eb48161739aa76bd40ef471c2c2a4ac7a5a80de7e8a9"
+    },
+    {
+      "hash": "0xcf8c279245d9c039dfde6725f807272b18703b31bb9f6ebec4b25bda922eb195",
+      "action": "Fund rotating demo wallet 0.02 USDC",
+      "status": "success",
+      "feeWei": "441000000000000",
+      "blockNumber": "25956526",
+      "url": "https://explorer.arc.io/tx/0xcf8c279245d9c039dfde6725f807272b18703b31bb9f6ebec4b25bda922eb195"
+    },
+    {
+      "hash": "0x8c5d2b0820e559b521ab00d748b795642e5977e751552d6a0226ee92d128a933",
+      "action": "Register Bob",
+      "status": "success",
+      "feeWei": "2421636000000000",
+      "blockNumber": "25956575",
+      "url": "https://explorer.arc.io/tx/0x8c5d2b0820e559b521ab00d748b795642e5977e751552d6a0226ee92d128a933"
+    },
+    {
+      "hash": "0x522d4329072f99aba2bc22a1302c86973685ebb0e7a6e7641be71805000a6f32",
+      "action": "Approve stealth USDC",
+      "status": "success",
+      "feeWei": "1163946000000000",
+      "blockNumber": "25956622",
+      "url": "https://explorer.arc.io/tx/0x522d4329072f99aba2bc22a1302c86973685ebb0e7a6e7641be71805000a6f32"
+    },
+    {
+      "hash": "0x6e4f0e2df15bdb78d4f1483ee034ae80aeb1f3a032922b79dfc2c67e54a9a8af",
+      "action": "Pay one-time address",
+      "status": "success",
+      "feeWei": "2060184000000000",
+      "blockNumber": "25956631",
+      "url": "https://explorer.arc.io/tx/0x6e4f0e2df15bdb78d4f1483ee034ae80aeb1f3a032922b79dfc2c67e54a9a8af"
+    },
+    {
+      "hash": "0x01ee1ab745682169995bd9ccc19a489a92ed7b5f5c49dc8637d71c62ce3924d2",
+      "action": "Bob recovers USDC",
+      "status": "success",
+      "feeWei": "979085613843700",
+      "blockNumber": "25956813",
+      "url": "https://explorer.arc.io/tx/0x01ee1ab745682169995bd9ccc19a489a92ed7b5f5c49dc8637d71c62ce3924d2"
+    },
+    {
+      "hash": "0x30277429346a6832feda207d6e899cff408ae23e2d9100bb8f0df4faac6f749c",
+      "action": "Approve shield pool",
+      "status": "success",
+      "feeWei": "1164198000000000",
+      "blockNumber": "25956868",
+      "url": "https://explorer.arc.io/tx/0x30277429346a6832feda207d6e899cff408ae23e2d9100bb8f0df4faac6f749c"
+    },
+    {
+      "hash": "0x0a1eee17cbeb7cbf3764c5e3172a2f88ee25bf6a4df6e6b6a7c62c0744ddeab1",
+      "action": "Shield 1 USDC",
+      "status": "success",
+      "feeWei": "12366333000000000",
+      "blockNumber": "25956878",
+      "url": "https://explorer.arc.io/tx/0x0a1eee17cbeb7cbf3764c5e3172a2f88ee25bf6a4df6e6b6a7c62c0744ddeab1"
+    },
+    {
+      "hash": "0x99a9be9f7391b005a045c74bcfaecc17c3b00a5eb4bdc58a04b20bd143789866",
+      "action": "Proof + gasless withdrawal",
+      "status": "success",
+      "feeWei": "72847324199647998",
+      "blockNumber": "25956989",
+      "url": "https://explorer.arc.io/tx/0x99a9be9f7391b005a045c74bcfaecc17c3b00a5eb4bdc58a04b20bd143789866"
+    },
+    {
+      "hash": "0xf995bdf844888fc31646ee9989b213be41d441a13d7e2b31b554a7a36f85d9cc",
+      "action": "Sweep controlled wallet to deployer",
+      "status": "success",
+      "feeWei": "441000000000000",
+      "blockNumber": "25957367",
+      "url": "https://explorer.arc.io/tx/0xf995bdf844888fc31646ee9989b213be41d441a13d7e2b31b554a7a36f85d9cc"
+    },
+    {
+      "hash": "0x1dcbf50aadec9c95720cc22bbf47b0990aab7ba1b47fa240b7b7b1241a5c4310",
+      "action": "Sweep controlled wallet to deployer",
+      "status": "success",
+      "feeWei": "441000000000000",
+      "blockNumber": "25957377",
+      "url": "https://explorer.arc.io/tx/0x1dcbf50aadec9c95720cc22bbf47b0990aab7ba1b47fa240b7b7b1241a5c4310"
+    },
+    {
+      "hash": "0x28341a5006fd8d73657b574a88b88c08dad46c94d6d47cfdce609910f82d928b",
+      "action": "Sweep controlled wallet to deployer",
+      "status": "success",
+      "feeWei": "441000000000000",
+      "blockNumber": "25957386",
+      "url": "https://explorer.arc.io/tx/0x28341a5006fd8d73657b574a88b88c08dad46c94d6d47cfdce609910f82d928b"
+    },
+    {
+      "hash": "0x92f6207db15261668727dcb71de39f8f40ce02f3e7d2f348c195d4e54da9bfd9",
+      "action": "Recover relayer fee surplus; preserve service float",
+      "status": "success",
+      "feeWei": "441000000000000",
+      "blockNumber": "25957394",
+      "url": "https://explorer.arc.io/tx/0x92f6207db15261668727dcb71de39f8f40ce02f3e7d2f348c195d4e54da9bfd9"
+    }
+  ]
+}
