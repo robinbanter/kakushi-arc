@@ -20,3 +20,11 @@ This migration performs reads only: no wallet connection, signature, deposit, pa
 Production environment: KAKUSHI_NETWORK=NEXT_PUBLIC_KAKUSHI_NETWORK=mainnet; ARC_RPC_URL=https://rpc.mainnet.arc.io; RELAYER_KEY from mainnet roles.
 
 Verified: 5 routes returned HTTP 200 with no rendered testnet wording, wrong Arc explorer link or uncaught page exception. Network APIs and RPC reported chain 5042; expected mainnet contract bytecode was present. Screenshots and machine-readable results are saved beside this report.
+
+## Final hosted polish — 2026-10-15
+
+All hosted mainnet routes and chain config were checked again. Privacy records and scanning keys belong to the connected wallet/browser, so no public database history or harmless server write endpoint is available for an unauthenticated persistence probe. No wallet transaction or relayer submission was attempted.
+
+Re-run: `node scripts/e2e-browser-hosted-mainnet.mjs`.
+
+No mainnet broadcasts or paid API calls. Live mainnet reads and DB writes only; fork transactions and complete wallet sign-ins: Not run.
