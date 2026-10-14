@@ -99,11 +99,13 @@ export function AppHeader() {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const { cfg } = useRuntime();
   return (
     <AppFrame className="isolate bg-transparent" panelClassName="bg-transparent">
       <Backdrop />
       <a href="#content" className="sr-only z-[60] rounded-full bg-ui-lime px-4 py-2 font-medium text-ui-on-lime focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Skip to content</a>
       <AppHeader />
+      {cfg?.network === "testnet" && <p className="mx-auto max-w-[1480px] px-4 py-3 text-center text-sm text-ui-muted">Arc testnet · Payments and gas use USDC. <a href="https://faucet.circle.com" target="_blank" rel="noreferrer" className="text-ui-text underline underline-offset-4">Get testnet USDC</a> — select Arc Testnet.</p>}
       <main id="content" tabIndex={-1} className="px-4 pt-2 pb-16 outline-none sm:px-6 lg:px-10 lg:pt-0 xl:px-14 xl:pb-14">
         <div className="mx-auto w-full max-w-[1480px]">{children}</div>
       </main>

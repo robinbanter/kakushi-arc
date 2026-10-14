@@ -113,6 +113,11 @@ function Register({ meta }: { meta: string }) {
 }
 
 export default function ReceivePage() {
+  const w = useWallet();
+  return <ReceiveInbox key={w.address ?? "disconnected"} />;
+}
+
+function ReceiveInbox() {
   const { client } = useRuntime();
   const w = useWallet();
   const { keys, unlock } = useStealthKeys();
@@ -137,7 +142,7 @@ export default function ReceivePage() {
 
   useEffect(() => {
     if (keys && deployment && client && scan.found === null && !scan.busy) void runScan();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Scan once when unlocked; the Scan button explicitly refreshes subsequent results.
   }, [keys, deployment, client]);
 
   if (ready && !deployment) return <div className="mx-auto max-w-[520px] pt-[6vh]"><ScreenTitle title="Receive privately" pill={<><Inbox size={13} /> Inbox</>} /><NotLive /></div>;

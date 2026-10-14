@@ -20,6 +20,8 @@ export type CopyButtonProps = {
   /** Shown instead of "Copy {label}" on the `button` variant. */
   children?: React.ReactNode;
   className?: string;
+  /** Called only after the clipboard write succeeds. */
+  onCopied?: () => void;
 };
 
 /**
@@ -41,6 +43,7 @@ export function CopyButton({
   disabled,
   children,
   className,
+  onCopied,
 }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -51,6 +54,7 @@ export function CopyButton({
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(value);
+      onCopied?.();
       setCopied(true);
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => setCopied(false), 1600);

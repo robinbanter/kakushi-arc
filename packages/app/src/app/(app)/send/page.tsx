@@ -107,7 +107,7 @@ export default function SendPage() {
         <Well className="mt-2">
           <div className="flex items-center justify-between text-[13px] text-ui-muted">
             <span>Amount</span>
-            {balance !== null ? <button type="button" className="hover:text-ui-text" onClick={() => setAmount(formatUsdc(balance))}>Balance {formatUsdc(balance, 2)} USDC</button> : null}
+            {balance !== null ? <span>Balance {formatUsdc(balance, 2)} USDC</span> : null}
           </div>
           <div className="mt-3 flex items-center gap-2">
             <input aria-label="Amount of USDC" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))} className="ui-figure min-w-0 flex-1 bg-transparent text-[40px] font-medium tracking-[-0.03em] outline-none" />
@@ -124,13 +124,13 @@ export default function SendPage() {
             <ConnectButton block large />
           )}
         </div>
-        <p className="px-3 pt-3 text-[12px] text-ui-muted">Gas is USDC too: you need no other token. The recipient gets USDC at a one-time address that only their viewing key can find.</p>
+        <p className="px-3 pt-3 text-[12px] text-ui-muted">Keep some USDC for gas; you need no other token. The recipient uses their viewing key to find the one-time address. Sender and amount remain public.</p>
         {err ? <p role="alert" className="px-3 pt-3 text-[13px] text-ui-down">{err}</p> : null}
       </GlassCard>
       {done ? (
         <Done
           headline={<>Sent {done.amount} USDC</>}
-          sub="Only the recipient can find it"
+          sub="Sent to a fresh address. Sender and amount remain public."
           details={
             <>
               <span>One-time address {short(done.stealth, 6)}</span>

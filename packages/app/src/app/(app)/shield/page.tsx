@@ -32,12 +32,14 @@ function Deposit({ pools }: { pools: PoolInfo[] }) {
     a.href = URL.createObjectURL(blob);
     a.download = `kakushi-note-${n.chainId}-${pool ? fmtPool(pool).replace(/\s/g, "") : "pool"}.txt`;
     a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     setSaved(true);
   }
 
   async function deposit() {
     if (!pool || !note || !saved || busy || !client || !cfg) return;
     setErr(null);
+    setBusy("Connecting to your wallet…");
     try {
       const wc = await w.walletClient();
       const allowance = (await client.readContract({ address: cfg.usdc, abi: erc20Abi, functionName: "allowance", args: [w.address as Hex, pool.address] })) as bigint;
@@ -66,7 +68,7 @@ function Deposit({ pools }: { pools: PoolInfo[] }) {
         <div className="text-[13px] text-ui-muted">Amount (fixed pools: everyone in a pool deposits the same amount)</div>
         <div className="mt-3 flex flex-wrap gap-2">
           {pools.map((p) => (
-            <button key={p.address} type="button" onClick={() => { setAddr(p.address); setNote(null); setSaved(false); }} className={cn("rounded-full px-4 py-2 text-[15px] font-medium ring-1 transition-colors", pool?.address === p.address ? "bg-[#16205a] text-white ring-[#3b55ff]/60" : "bg-ui-surface-2 text-ui-muted ring-transparent hover:text-ui-text")}>
+            <button key={p.address} type="button" disabled={!!busy} onClick={() => { setAddr(p.address); setNote(null); setSaved(false); }} className={cn("rounded-full px-4 py-2 text-[15px] font-medium ring-1 transition-colors disabled:opacity-50", pool?.address === p.address ? "bg-[#16205a] text-white ring-[#3b55ff]/60" : "bg-ui-surface-2 text-ui-muted ring-transparent hover:text-ui-text")}>
               {fmtPool(p)}
             </button>
           ))}
@@ -80,9 +82,7 @@ function Deposit({ pools }: { pools: PoolInfo[] }) {
             <button type="button" onClick={() => download(note)} className="inline-flex items-center gap-1.5 rounded-full bg-ui-surface-2 px-4 py-2 text-[14px] font-medium hover:bg-ui-surface-3">
               <Download size={15} /> {saved ? "Saved. Download again" : "Download note"}
             </button>
-            <span onClickCapture={() => setSaved(true)}>
-              <CopyButton value={serializeNote(note)} label="note" variant="button" />
-            </span>
+            <CopyButton value={serializeNote(note)} label="note" variant="button" onCopied={() => setSaved(true)} />
           </div>
         </Well>
       ) : null}
@@ -215,7 +215,7 @@ export default function ShieldPage() {
   const { pools, ready, deployment } = useDeployment();
   const [tab, setTab] = useState<"in" | "out">("in");
   if (ready && !deployment) return <div className="mx-auto max-w-[500px] pt-[6vh]"><ScreenTitle title="Shield" pill={<><Shield size={13} /> ZK pool</>} /><NotLive /></div>;
-  if (!deployment) return null;
+  if (!deployment) return <p role="status" className="p-8 text-center text-ui-muted">Loading the shielded pools…</p>;
   return (
     <div className="mx-auto w-full max-w-[500px] pt-6 pb-20 sm:pt-[5vh]">
       <ScreenTitle title="Shield" pill={<><Shield size={13} /> ZK pool</>} />

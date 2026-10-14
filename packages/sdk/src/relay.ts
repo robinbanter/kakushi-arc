@@ -18,16 +18,19 @@ export interface RelayWithdrawRequest {
 
 type Fetch = typeof fetch;
 
-async function parse(r: Response): Promise<any> {
+async function parse<T>(r: Response): Promise<T> {
   const text = await r.text();
-  let body: any;
+  let body: unknown;
   try {
     body = JSON.parse(text);
   } catch {
     throw new Error(`relayer answered ${r.status}: ${text.slice(0, 200)}`);
   }
-  if (!r.ok) throw new Error(body?.error ?? `relayer answered ${r.status}`);
-  return body;
+  if (!r.ok) {
+    const error = body && typeof body === "object" && "error" in body ? body.error : null;
+    throw new Error(typeof error === "string" ? error : `relayer answered ${r.status}`);
+  }
+  return body as T;
 }
 
 /** GET {url}/info: the relayer's address and the fee it asks per pool right now. */

@@ -2,7 +2,7 @@
 
 // The account layer: an injected EIP-1193 browser wallet (MetaMask, Rabby, ...). Arc's gas is USDC, so the wallet
 // only ever needs USDC; the chain is added to the wallet on first use.
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { createWalletClient, custom, type Hex, type WalletClient } from "viem";
 import { arcChain } from "@kakushi/sdk";
 import { useRuntime } from "./runtime";
@@ -20,13 +20,23 @@ const Ctx = createContext<WalletState | null>(null);
 
 declare global {
   interface Window {
-    ethereum?: { request: (a: { method: string; params?: unknown[] }) => Promise<unknown> };
+    ethereum?: {
+      request: (a: { method: string; params?: unknown[] }) => Promise<unknown>;
+      on?: (event: string, listener: (accounts: Hex[]) => void) => void;
+      removeListener?: (event: string, listener: (accounts: Hex[]) => void) => void;
+    };
   }
 }
 
 export function WalletProvider({ children }: { children: ReactNode }) {
   const { cfg } = useRuntime();
   const [address, setAddress] = useState<Hex | null>(null);
+  useEffect(() => {
+    const provider = window.ethereum;
+    const changed = (accounts: Hex[]) => setAddress((current) => current ? accounts[0] ?? null : null);
+    provider?.on?.("accountsChanged", changed);
+    return () => provider?.removeListener?.("accountsChanged", changed);
+  }, []);
 
   const connectInjected = useCallback(async () => {
     if (!window.ethereum) throw new Error("No browser wallet found. Install MetaMask or Rabby.");

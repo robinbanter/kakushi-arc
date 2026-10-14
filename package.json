@@ -5,7 +5,9 @@
   "license": "MIT",
   "description": "Kakushi on Circle's Arc: private USDC payments. Stealth addresses (ERC-5564/6538), a shielded USDC pool with Noir/UltraHonk proofs, and a gasless relayer paid in USDC.",
   "type": "module",
-  "engines": { "node": ">=22.18.0" },
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "packageManager": "pnpm@10.29.2",
   "scripts": {
     "typecheck": "pnpm -r typecheck",
@@ -19,11 +21,15 @@
     "e2e:fork": "node scripts/e2e-fork.ts",
     "e2e:testnet": "node scripts/e2e-testnet.ts",
     "relayer": "pnpm --filter @kakushi/relayer start",
-    "dev": "pnpm --filter @kakushi/app dev"
+    "dev": "pnpm --filter @kakushi/app dev",
+    "lint": "eslint packages/app/src packages/widget/src packages/sdk/src --max-warnings 0",
+    "e2e:browser": "node scripts/e2e-browser-round2.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",
+    "eslint": "^10.12.0",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.2",
     "vitest": "^3.2.4"
   },
   "dependencies": {

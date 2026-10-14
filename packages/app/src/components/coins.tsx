@@ -3,7 +3,7 @@
 export function UsdcCoin({ size = 42 }: { size?: number }) {
   return (
     <span role="img" aria-label="USDC" className="inline-grid shrink-0 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-black/10" style={{ width: size, height: size }}>
-      {/* eslint-disable-next-line @next/next/no-img-element -- tiny static SVG */}
+      {/* Tiny local SVG; no image transformation needed. */}
       <img src="/logos/usdc.svg" alt="" width={size} height={size} style={{ width: "100%", height: "100%" }} draggable={false} />
     </span>
   );

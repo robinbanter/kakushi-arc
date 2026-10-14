@@ -42,7 +42,7 @@ export default function DevelopersPage() {
     </section>
     <section className="mt-12" aria-labelledby="contracts-title">
       <h2 id="contracts-title" className="text-2xl">Contracts · {cfg?.chainName ?? "loading"}</h2>
-      <p className="mt-3 text-ui-muted">Loaded from this app’s deployment record. Testnet deployment is live; mainnet is not deployed.</p>
+      <p className="mt-3 text-ui-muted">Loaded from this app’s deployment record. This demo uses Arc testnet. Mainnet deployment evidence is recorded separately in the repository; these examples use testnet funds only.</p>
       <dl className="mt-5 divide-y divide-ui-hairline-strong">{contracts.map(([name, address]) => <div key={name} className="grid gap-2 py-4 md:grid-cols-[1fr_2fr]"><dt>{name}</dt><dd className="min-w-0"><a className="break-all font-mono text-sm text-ui-lime-text underline underline-offset-4" href={`${cfg?.explorer}/address/${address}`} target="_blank" rel="noreferrer">{address}</a></dd></div>)}</dl>
     </section>
     <aside className="mt-12 border-t border-ui-hairline-strong py-6 text-ui-muted">Small anonymity sets, a single relayer and unaudited software. Sender and amount remain public for stealth payments. FHE is next, not shipped. <a className="underline text-ui-text" href="https://github.com/nickthelegend/kakushi-arc/blob/main/docs/E2E-TESTNET.md">Read the live testnet evidence</a>.</aside>
