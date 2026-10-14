@@ -1,3 +1,4 @@
+import { retryRpcRead } from "./rpc-retry.ts";
 // ERC-5564 stealth addresses, scheme 1 (secp256k1 with view tags), and ERC-6538 registry helpers.
 //
 // Scheme 1, byte for byte as the reference SDK (ScopeLift/stealth-address-sdk):
@@ -328,7 +329,7 @@ export interface ScanOptions {
   schemeId?: bigint;
   /** also read each match's current balance */
   withBalances?: boolean;
-  /** parallel eth_getLogs requests (default 1; the app uses 6 because Arc's public RPC caps a range at ~5000 blocks) */
+  /** parallel eth_getLogs requests (default 1; keep this low on rate-limited public RPCs) */
   concurrency?: number;
   onProgress?: (scannedTo: bigint) => void;
 }
@@ -348,7 +349,7 @@ export async function scanAnnouncements(client: PublicClient, announcer: Hex, fr
   const width = Math.max(1, opts.concurrency ?? 1);
   for (let i = 0; i < ranges.length; i += width) {
     const group = ranges.slice(i, i + width);
-    const results = await Promise.all(group.map(([from, to]) => client.getLogs({ address: announcer, event, args: { schemeId: opts.schemeId ?? STEALTH_SCHEME_ID }, fromBlock: from, toBlock: to })));
+    const results = await Promise.all(group.map(([from, to]) => retryRpcRead(() => client.getLogs({ address: announcer, event, args: { schemeId: opts.schemeId ?? STEALTH_SCHEME_ID }, fromBlock: from, toBlock: to }))));
     results.forEach((logs, gi) => {
       for (const l of logs) {
         const a = l.args;

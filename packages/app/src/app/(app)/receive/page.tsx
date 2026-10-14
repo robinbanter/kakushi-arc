@@ -78,6 +78,7 @@ function Register({ meta }: { meta: string }) {
   const { deployment } = useDeployment();
   const w = useWallet();
   const [state, setState] = useState<"unknown" | "on" | "off" | "busy">("unknown");
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     if (!client || !w.address || !deployment) return;
     let live = true;
@@ -91,21 +92,23 @@ function Register({ meta }: { meta: string }) {
   async function register() {
     if (!client || !deployment) return;
     setState("busy");
+    setError(null);
     try {
       const wc = await w.walletClient();
       const hash = await wc.sendTransaction({ chain: wc.chain, account: wc.account!, to: deployment.stealthRegistry, data: buildRegisterKeysCalldata(meta) });
       requireSuccessfulReceipt(await client.waitForTransactionReceipt({ hash }), "Register");
       setState("on");
-    } catch {
+    } catch (e) {
+      setError(readError((e as Error).message));
       setState("off");
     }
   }
   return state === "on" ? (
     <StatusPill tone="lime" size="sm">Listed on {cfg?.chainName ?? "Arc"}: anyone can pay your address</StatusPill>
   ) : (
-    <SecondaryButton size="sm" loading={state === "busy"} disabled={state === "unknown"} onClick={register}>
+    <div><SecondaryButton size="sm" loading={state === "busy"} disabled={state === "unknown"} onClick={register}>
       List my address on {cfg?.chainName ?? "Arc"} (one transaction)
-    </SecondaryButton>
+    </SecondaryButton>{error ? <p role="alert" className="mt-2 text-sm text-ui-warn">{error}</p> : null}</div>
   );
 }
 
@@ -115,6 +118,7 @@ export default function ReceivePage() {
   const { keys, unlock } = useStealthKeys();
   const { deployment, ready } = useDeployment();
   const [unlocking, setUnlocking] = useState(false);
+  const [unlockError, setUnlockError] = useState<string | null>(null);
   const [scan, setScan] = useState<{ busy: boolean; found: StealthMatch[] | null; err: string | null }>({ busy: false, found: null, err: null });
   const [moved, setMoved] = useState<Hex | null>(null);
   const { cfg } = useRuntime();
@@ -124,7 +128,7 @@ export default function ReceivePage() {
     setScan({ busy: true, found: null, err: null });
     try {
       const latest = await client.getBlockNumber();
-      const matches = await scanAnnouncements(client as PublicClient, deployment.stealthAnnouncer, BigInt(deployment.deployBlock), latest, { viewingKey: keys.viewingKey, spendingPublicKey: keys.spendingPublicKey, spendingKey: keys.spendingKey }, { withBalances: true, concurrency: 6 });
+      const matches = await scanAnnouncements(client as PublicClient, deployment.stealthAnnouncer, BigInt(deployment.deployBlock), latest, { viewingKey: keys.viewingKey, spendingPublicKey: keys.spendingPublicKey, spendingKey: keys.spendingKey }, { withBalances: true, concurrency: 1 });
       setScan({ busy: false, found: matches.sort((a, b) => Number(b.blockNumber - a.blockNumber)), err: null });
     } catch (e) {
       setScan({ busy: false, found: null, err: readError((e as Error).message) });
@@ -153,13 +157,14 @@ export default function ReceivePage() {
               <div className="mt-4 flex flex-wrap gap-2"><Register meta={keys.metaAddress} /></div>
             </>
           ) : w.address ? (
-            <PrimaryButton size="lg" block className="mt-3" icon={<KeyRound />} loading={unlocking} onClick={() => { setUnlocking(true); unlock().catch(() => {}).finally(() => setUnlocking(false)); }}>
+            <PrimaryButton size="lg" block className="mt-3" icon={<KeyRound />} loading={unlocking} onClick={() => { setUnlocking(true); setUnlockError(null); unlock().catch((e) => setUnlockError(readError((e as Error).message))).finally(() => setUnlocking(false)); }}>
               Unlock with your wallet
             </PrimaryButton>
           ) : (
             <div className="mt-3"><ConnectButton block large /></div>
           )}
         </Well>
+        {unlockError ? <p role="alert" className="p-3 text-sm text-ui-warn">{unlockError}</p> : null}
         {keys ? (
           <div className="mt-2 px-1">
             <div className="flex items-center justify-between px-2 py-2">

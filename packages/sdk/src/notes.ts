@@ -1,3 +1,4 @@
+import { retryRpcRead } from "./rpc-retry.ts";
 // Shielded-pool notes and the pool's incremental Merkle tree, for apps and wallets.
 //
 // The cryptographic definitions are NOT repeated here: they live in @kakushi/prover
@@ -160,7 +161,7 @@ export class IncrementalMerkleTree {
     for (let from = fromBlock; from <= end; from += chunk) ranges.push([from, from + chunk - 1n > end ? end : from + chunk - 1n]);
     const width = Math.max(1, opts.concurrency ?? 1);
     for (let i = 0; i < ranges.length; i += width) {
-      const groups = await Promise.all(ranges.slice(i, i + width).map(([from, to]) => client.getLogs({ address: pool, event, fromBlock: from, toBlock: to })));
+      const groups = await Promise.all(ranges.slice(i, i + width).map(([from, to]) => retryRpcRead(() => client.getLogs({ address: pool, event, fromBlock: from, toBlock: to }))));
       for (const logs of groups) {
         for (const l of logs) {
           const { commitment, leafIndex } = l.args as { commitment?: Hex; leafIndex?: number };
