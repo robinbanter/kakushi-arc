@@ -23,7 +23,8 @@
     "relayer": "pnpm --filter @kakushi/relayer start",
     "dev": "pnpm --filter @kakushi/app dev",
     "lint": "eslint packages/app/src packages/widget/src packages/sdk/src --max-warnings 0",
-    "e2e:browser": "node scripts/e2e-browser-round2.mjs"
+    "e2e:browser": "node scripts/e2e-browser-round2.mjs",
+    "dryrun:mainnet": "node --import ./scripts/dryrun-loader.mjs scripts/dryrun-mainnet.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",
