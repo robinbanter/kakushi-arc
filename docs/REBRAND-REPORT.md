@@ -20,4 +20,4 @@ Live: register → widget pay 0.01 → receive → move; outlay 0.080525 USDC, r
 New shield/withdraw: Not run under the ≤0.5 USDC gross cap; minimum deployed pool is 1 USDC. Earlier complete browser proof/relay receipts remain in E2E-TESTNET.md.
 Full harness requires explicit `ALLOW_ONE_USDC_DEPOSIT=1` plus `LIVE=1`; that authorization was requested and not assumed.
 Still weak: SDK/widget unpublished, auditor export UI next, public RPC throttling, small anonymity sets, single relayer, no external audit.
-Commit/push and process cleanup: recorded after final verification.
+Pushed: `3a44355` (rebrand + evidence); preserved supplied art/prior evidence in `9392c6b`. Report-only follow-up is the latest commit. Tree clean; both local servers stopped by PID, browsers closed; no fork or paid resource created.
